@@ -90,7 +90,7 @@ public class Page {
         String pageName = "Page starting at: " + this.id + ".\n";
         String pageInfo = "Page size: " + this.size + ".\n";
         String pageInfo1 = "Page usedSpace: " + this.usedSpace + ".\n";
-        String pageInfo2 = "Process using space: " + this.processInPage.PID() + ".\n";
+        String pageInfo2 = "Process using space: " + this.processInPage.pid() + ".\n";
         
         return pageName + pageInfo + pageInfo1 + pageInfo2;
     }

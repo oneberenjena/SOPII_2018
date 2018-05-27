@@ -13,8 +13,9 @@ public class Memory {
     private List<Page> pageList;
     private int pageNumber;
     private int pageSize;
-    private int size;
+    private int memorySize;
     private int usedSpace;
+    private Page inMemory[];
 
     /**
      * Constructor for memory
@@ -23,8 +24,9 @@ public class Memory {
      * @param pageNumber  Total memory pages
      * @param blockSize   Size in MB that pages will have
      */
+
     public Memory(int size, int pageNumber, int blockSize){
-        this.size = size;
+        this.memorySize = size;
         this.usedSpace = 0;
         this.pageNumber = pageNumber;
         this.pageSize = blockSize;
@@ -42,8 +44,8 @@ public class Memory {
      * 
      * @return int  Memory size in MB
      */
-    public int size(){
-        return this.size;
+    public int getMemorySize(){
+        return this.memorySize;
     }
 
     /**
@@ -51,7 +53,7 @@ public class Memory {
      * 
      * @return int  Memory pages number
      */
-    public int pageNumber(){
+    public int getPageNumber(){
         return this.pageNumber;
     }
 
@@ -60,8 +62,13 @@ public class Memory {
      * 
      * @return int  Memory space used in MB
      */
-    public int usedSpace(){
-        return this.size - this.usedSpace;
+    public int getUsedSpace(){
+        return this.memorySize - this.usedSpace;
+    }
+
+    //funcion auxiliar para hacer pruebas
+    public void auxUsedMemory(int newUsedSpace ){
+        this.usedSpace += newUsedSpace;
     }
 
     /**
@@ -70,7 +77,7 @@ public class Memory {
      * @return int  Memory space free in MB
      */
     public int getfreeMemory(){
-        return this.size - this.usedSpace;
+        return this.memorySize - this.usedSpace;
     }
 
     /**
@@ -78,7 +85,7 @@ public class Memory {
      * 
      * @return int Memory page size in MB
      */
-    public int pageSize() {
+    public int getPageSize() {
         return this.pageSize;
     }
 
@@ -125,6 +132,10 @@ public class Memory {
             i++;
         }
         return pageList;
+    }
+
+    public Page[] getInMemory() {
+        return inMemory;
     }
     
 }

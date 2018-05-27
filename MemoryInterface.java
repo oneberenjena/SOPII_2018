@@ -170,7 +170,7 @@ public class MemoryInterface extends JPanel {
         processConf.setPreferredSize(new Dimension(300, 200));
 
 
-        processNameLabel.setText("Proceso1");
+        processNameLabel.setText("Nombre del Proceso");
         processNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
         processNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -180,7 +180,7 @@ public class MemoryInterface extends JPanel {
         processSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
         processSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        processName.setText("Nombre proceso");
+        processName.setText("Proceso1");
 
         processName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,7 +188,7 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-        processSize.setText("51200");
+        processSize.setText("1024");
         processSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 processSizeActionPerformed(evt);
@@ -351,6 +351,18 @@ public class MemoryInterface extends JPanel {
             }
         });
 
+        processTable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                processTableFocusLost(evt);
+            }
+        });
+
+        processTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                processTableMouseClicked(evt);
+            }
+        });
+
         processScroll.setViewportView(processTable);
 
         if (processTable.getColumnModel().getColumnCount() > 0) {
@@ -399,37 +411,37 @@ public class MemoryInterface extends JPanel {
 
         suspendProcess.setText("Suspender");
         suspendProcess.setEnabled(false);
-        /*suspendProcess.addActionListener(new java.awt.event.ActionListener() {
+        suspendProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // Aqui el metodo que ejecuta la accion
+                suspendProcessActionPerformed(evt);
             }
-        });*/ 
+        });
         deleteProcess.setText("Eliminar");
         deleteProcess.setEnabled(false);
 
-        /*deleteProcess.addActionListener(new java.awt.event.ActionListener() {
+        deleteProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // Aqui el metodo que ejecuta la accion
+                deleteProcessActioPerformed(evt);
             }
-        });*/ 
+        });
 
         readyProcess.setText("Listo");
         readyProcess.setEnabled(false);
 
-        /*readyProcess.addActionListener(new java.awt.event.ActionListener() {
+        readyProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // Aqui el metodo que ejecuta la accion
+                readyProcessActionPerformed(evt);
             }
-        });*/ 
+        });
 
         lockProcess.setText("Bloqueado");
         lockProcess.setEnabled(false);
 
-        /*lockProcess.addActionListener(new java.awt.event.ActionListener() {
+        lockProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // Aqui el metodo que ejecuta la accion
+                lockProcessActionPerformed(evt);
             }
-        });*/
+        });
 
         GroupLayout processStatusLayout = new GroupLayout(panelProcessStatus); 
         processStatusLayout.setAutoCreateGaps(true);
@@ -671,7 +683,7 @@ public class MemoryInterface extends JPanel {
 
                 int pages = sizeMem/ sizePag;
                 memory = new Memory(sizeMem,pages,sizePag);
-                this.process = new Process[memory.pageNumber()];
+                this.process = new Process[memory.getPageNumber()];
                 alertArea.append("Se ha creado la memoria\n");
                 saveMemoryConf.setEnabled(false);
                 labelMemory2.setText(Integer.toString(sizeMem));
@@ -721,6 +733,7 @@ public class MemoryInterface extends JPanel {
             //creo el proceso
             this.process[countProcess] = new Process(nameProc, sizeProc);
             // Lo agrego a memoria 
+            memory.auxUsedMemory(sizeProc);
             //no tengo funcion para esto todavia 
             alertArea.append(" Se ha creado el procespo "+nameProc+", con PID  '"+Integer.toString(this.process[countProcess].pid())+"\n");
             countProcess++;
@@ -748,6 +761,68 @@ public class MemoryInterface extends JPanel {
     private void processNameActionPerformed(java.awt.event.ActionEvent evt) {
         
     }
+    //#########################################################################
+    //#########################################################################
+
+
+    private void processTableFocusLost(java.awt.event.FocusEvent evt){
+        
+    }
+    private void  processTableMouseClicked(java.awt.event.MouseEvent evt){
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+        alertArea.append(Integer.toString(row)+"\n");
+        String status = process[row].status();
+        alertArea.append(status+"\n");
+        deleteProcess.setEnabled(true);
+        if (status == "Listo" ) {
+            readyProcess.setEnabled(false);
+            suspendProcess.setEnabled(true);
+            lockProcess.setEnabled(true);
+        } else if(status == "Bloqueado/Listo") {
+            suspendProcess.setEnabled(false);
+            readyProcess.setEnabled(true);
+            lockProcess.setEnabled(false);
+        } else if(status == "Bloqueado") {
+            lockProcess.setEnabled(false);
+            suspendProcess.setEnabled(true);
+            readyProcess.setEnabled(true);
+        } else if (status == "Eliminado"){
+            suspendProcess.setEnabled(false);
+            readyProcess.setEnabled(false);
+            deleteProcess.setEnabled(false);
+            lockProcess.setEnabled(false);
+        }
+    }
+
+    //#########################################################################
+    //#########################################################################
+
+
+    private void suspendProcessActionPerformed(java.awt.event.ActionEvent evt){
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+
+    }
+
+    private void deleteProcessActioPerformed(java.awt.event.ActionEvent evt){
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+    }
+
+    private void readyProcessActionPerformed(java.awt.event.ActionEvent evt){
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+
+    }
+    private void lockProcessActionPerformed(java.awt.event.ActionEvent evt){
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+    }
+
+    //########################################################################
+    //########################################################################
+
 
     private void updateMemoryTable(){
 
@@ -777,13 +852,13 @@ public class MemoryInterface extends JPanel {
     }
 
     private void update(){
-        labelUsedMemory2.setText(Integer.toString(memory.usedSpace()));
+        labelUsedMemory2.setText(Integer.toString(memory.getUsedSpace()));
         labelAvailableMemory2.setText(Integer.toString(memory.getfreeMemory()));
         updateProcessTable();
     }
 
     /**
-     * Constructor for memory panel
+     * 
      * 
      */
 
