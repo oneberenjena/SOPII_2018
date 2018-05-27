@@ -4,10 +4,10 @@
  *
  * @version     1.0 May 2018
  * @author      Amanda Camacho, 
-                Benjamin Amos <benjamin.oxi@gmail.com>
+ *               Benjamin Amos <benjamin.oxi@gmail.com>
  */
 public class Page {
-    private int id;
+    private String id;
     private int size;
     private int usedSpace;
     private Process processInPage;
@@ -18,7 +18,7 @@ public class Page {
      * @param block      Block name in memory table
      * @param size       Size in MB that memory page will have
      */
-    public Page(int block, int size){
+    public Page(String block, int size){
         this.id = "0x" + block;
         this.size = size;
         this.usedSpace = 0;
@@ -30,7 +30,7 @@ public class Page {
      * 
      * @return Memory block id
      */
-    public int id(){
+    public String id(){
         return this.id;
     } 
 

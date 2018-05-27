@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * @version     1.0 May 2018 
  * @author      Amanda Camacho,  
-                Benjamin Amos   <benjamin.oxi@gmail.com>                
+ *               Benjamin Amos   <benjamin.oxi@gmail.com>                
  */
 public class Memory {
     private List<Page> pageList;
@@ -65,6 +65,15 @@ public class Memory {
     }
 
     /**
+     * Retrieves memory space free in MB
+     * 
+     * @return int  Memory space free in MB
+     */
+    public int getfreeMemory(){
+        return this.size - this.usedSpace;
+    }
+
+    /**
      * Retrieves memory page size in MB
      * 
      * @return int Memory page size in MB
@@ -77,7 +86,7 @@ public class Memory {
      * Retrieves first free memory block
      * 
      * @return Page Free memory block or null if there are not
-                    any free blocks
+     *               any free blocks
      */
     public Page getFreeBlock(){
         Page currentPage = null;
