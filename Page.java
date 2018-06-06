@@ -7,8 +7,11 @@
  *               Benjamin Amos <benjamin.oxi@gmail.com>
  */
 public class Page {
-    private String id;
-    private int size;
+    private String processId;   //Id del proceso 
+    private String processName; //Nombre del proceso 
+    private Integer pageId;     // Id de la pagina 
+
+    private int size;       
     private int usedSpace;
     private Process processInPage;
 
@@ -18,8 +21,8 @@ public class Page {
      * @param block      Block name in memory table
      * @param size       Size in MB that memory page will have
      */
-    public Page(String block, int size){
-        this.id = "0x" + block;
+    public Page(int block, int size){
+        this.pageId = block;
         this.size = size;
         this.usedSpace = 0;
         this.processInPage = null;
@@ -30,8 +33,8 @@ public class Page {
      * 
      * @return Memory block id
      */
-    public String id(){
-        return this.id;
+    public int id(){
+        return this.pageId;
     } 
 
     /**
@@ -87,10 +90,10 @@ public class Page {
      * @return String with page info
      */
     public String toString(){
-        String pageName = "Page starting at: " + this.id + ".\n";
+        String pageName = "Page starting at: " + Integer.toString(this.pageId) + ".\n";
         String pageInfo = "Page size: " + this.size + ".\n";
         String pageInfo1 = "Page usedSpace: " + this.usedSpace + ".\n";
-        String pageInfo2 = "Process using space: " + this.processInPage.pid() + ".\n";
+        String pageInfo2 = "Process using space: " + this.processInPage.getPid() + ".\n";
         
         return pageName + pageInfo + pageInfo1 + pageInfo2;
     }

@@ -174,11 +174,10 @@ public class MemoryInterface extends JPanel {
         processNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
         processNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-
-
-        processSizeLabel.setText("Tamaño de Proceso"); 
+        processSizeLabel.setText("Tamaño de Proceso (MB)"); 
         processSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
         processSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
 
         processName.setText("Proceso1");
 
@@ -728,17 +727,16 @@ public class MemoryInterface extends JPanel {
         int sizeProc = Integer.parseInt(processSize.getText());
         System.out.println(nameProc);
         if ( sizeProc<= memory.getfreeMemory()){
-
             //creo el proceso
-            this.process[countProcess] = new Process(nameProc, sizeProc);
+            this.process[countProcess] = new Process(nameProc, sizeProc,memory.getPageSize());
             // Lo agrego a memoria 
             memory.auxUsedMemory(sizeProc);
             //no tengo funcion para esto todavia 
-            alertArea.append(" Se ha creado el procespo "+nameProc+", con PID  '"+Integer.toString(this.process[countProcess].pid())+"\n");
+            alertArea.append(" Se ha creado el proceso "+nameProc+", con PID "+Integer.toString(this.process[countProcess].getPid())+"\n");
             countProcess++;
             labelNumberProcess2.setText(Integer.toString(countProcess));
             updateProcessTable();
-
+            update();
         }else{
             alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso");
         }
@@ -845,7 +843,7 @@ public class MemoryInterface extends JPanel {
         // Vuelvo a cargar desde la lista de procesos que tengo global
 
          for (int i = 0; i < countProcess; i++) {
-            Object[] row = {process[i].pid(), process[i].name(), process[i].size(),"paginas", "PaginasMem",process[i].status()};
+            Object[] row = {process[i].getPid(), process[i].getName(), process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
             model.addRow(row); 
         }
     }
@@ -853,6 +851,7 @@ public class MemoryInterface extends JPanel {
     private void update(){
         labelUsedMemory2.setText(Integer.toString(memory.getUsedSpace()));
         labelAvailableMemory2.setText(Integer.toString(memory.getfreeMemory()));
+        labelUsedPages2.setText(Integer.toString(memory.getUsedPages()));
         updateProcessTable();
     }
 

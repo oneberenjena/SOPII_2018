@@ -16,6 +16,8 @@ public class Memory {
     private int memorySize;
     private int usedSpace;
     private Page inMemory[];
+    private int dispPages;
+    private List<Process> waitingProcess;
 
     /**
      * Constructor for memory
@@ -31,10 +33,11 @@ public class Memory {
         this.pageNumber = pageNumber;
         this.pageSize = blockSize;
         this.pageList = new ArrayList<Page>();
-
-        String iBlock;
+        this.dispPages =pageNumber;
+        this.waitingProcess= new ArrayList<Process>();
+        int iBlock;
         for (int i = 0; i < pageNumber; i++) {
-            iBlock = "000" + i; 
+            iBlock =  i; 
             this.pageList.add(new Page(iBlock, blockSize));    
         }
     }
@@ -57,13 +60,44 @@ public class Memory {
         return this.pageNumber;
     }
 
+
     /**
      * Retrieves memory space used in MB
      * 
      * @return int  Memory space used in MB
      */
     public int getUsedSpace(){
-        return this.memorySize - this.usedSpace;
+        return this.usedSpace;
+    }
+
+    /*
+    */
+
+    private void addProcess(Process process){
+
+        if (dispPages>=process.getNumberOfPages()){
+            for(int i = 0; i < process.getNumberOfPages(); i++) {
+            //aqui debo agregar el proceso a la memoria pagina por pagina 
+            }
+        }else{
+            // Coloco los procesos en una cola de espera 
+            this.waitingProcess.add(process);
+        }
+
+    }
+
+    /*
+    */
+    private void deleteProcessFromMemory(){
+
+    }
+
+
+
+     /*
+    */
+    public int getUsedPages(){
+        return this.pageNumber-this.dispPages; 
     }
 
     //funcion auxiliar para hacer pruebas

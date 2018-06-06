@@ -1,3 +1,5 @@
+import static java.lang.Math.ceil;
+
 /**
  * 
  * Process class for simulating process in memory.
@@ -13,7 +15,12 @@ public class Process {
     private int size;
     private String name;
     private int status;
-    private int memoryTime;
+    private int memoryTime;     // Tiempo que lleva en la memoria 
+    private int totalTime;      // Tiempo total que debe estar en la memoria
+    private int runningTime;    // Tiempo que lleva corriendo.
+    private Page pageTable[];
+    private int numberOfPages;
+    private int realSize;
     
     /**
      * Constructor for process
@@ -21,21 +28,35 @@ public class Process {
      * @param name       Name that process will have
      * @param size       Size in MB that process will use
      */
-    public Process(String name, int size){
+    public Process(String name, int size,int pageSize){
         this.pid = (int) (Math.random() * 100);
         // this.pid = (int) (Math.random() * 10000);
         this.name = name;
         this.size = size;
         this.status = 0; 
         this.memoryTime = 0;
+        this.totalTime=100000;
+        this.runningTime=0;
+        this.numberOfPages= numberPages(size,pageSize);
+        this.realSize= numberOfPages*pageSize;
+        this.pageTable=new Page[this.numberOfPages];
     }
 
+    /**
+     cantidad de paginas usadas por el proceso 
+     */
+
+    private int numberPages(int size, int pageSize) {
+        if (size % pageSize != 0)
+            return (int) (ceil(size / pageSize) + 1);
+        return size / pageSize;
+    }
     /**
      * Retrieves process id
      * 
      * @return int process id
      */
-    public int pid(){
+    public int getPid(){
         return this.pid;
     }
 
@@ -53,7 +74,7 @@ public class Process {
      * 
      * @return int Memory size in MB
      */
-    public int size(){
+    public int getSize(){
         return this.size;
     }
 
@@ -62,7 +83,7 @@ public class Process {
      * 
      * @return String Process name
      */
-    public String name() {
+    public String getName() {
         return this.name;
     }
 
@@ -101,6 +122,33 @@ public class Process {
     public boolean isInMemory(){
         return this.memoryTime > 0; 
     }
+
+    /**
+     */
+    public int getNumberOfPages(){
+        return this.numberOfPages; 
+    }
+
+
+    /**
+     */
+    public int getStatus(){
+        return status; 
+    }
+
+    public Page[] getPageTable() {
+        return pageTable;
+    }
+
+    public void setPageTable(Page[] pageTable) {
+        this.pageTable = pageTable;
+    }
+
+    public void setProcessStatus(int status){
+        this.status=status;
+    }
+
+
 
     /**
      * Just for printing process info in a nice way
