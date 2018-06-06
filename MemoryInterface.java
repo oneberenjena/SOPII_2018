@@ -736,6 +736,7 @@ public class MemoryInterface extends JPanel {
             countProcess++;
             labelNumberProcess2.setText(Integer.toString(countProcess));
             updateProcessTable();
+            update();
         }else{
             alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso");
         }
@@ -850,6 +851,7 @@ public class MemoryInterface extends JPanel {
     private void update(){
         labelUsedMemory2.setText(Integer.toString(memory.getUsedSpace()));
         labelAvailableMemory2.setText(Integer.toString(memory.getfreeMemory()));
+        labelUsedPages2.setText(Integer.toString(memory.getUsedPages()));
         updateProcessTable();
     }
 

@@ -67,7 +67,7 @@ public class Memory {
      * @return int  Memory space used in MB
      */
     public int getUsedSpace(){
-        return this.memorySize - this.usedSpace;
+        return this.usedSpace;
     }
 
     /*
@@ -90,6 +90,14 @@ public class Memory {
     */
     private void deleteProcessFromMemory(){
 
+    }
+
+
+
+     /*
+    */
+    public int getUsedPages(){
+        return this.pageNumber-this.dispPages; 
     }
 
     //funcion auxiliar para hacer pruebas

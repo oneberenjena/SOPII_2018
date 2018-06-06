@@ -15,7 +15,9 @@ public class Process {
     private int size;
     private String name;
     private int status;
-    private int memoryTime;
+    private int memoryTime;     // Tiempo que lleva en la memoria 
+    private int totalTime;      // Tiempo total que debe estar en la memoria
+    private int runningTime;    // Tiempo que lleva corriendo.
     private Page pageTable[];
     private int numberOfPages;
     private int realSize;
@@ -33,7 +35,8 @@ public class Process {
         this.size = size;
         this.status = 0; 
         this.memoryTime = 0;
-
+        this.totalTime=100000;
+        this.runningTime=0;
         this.numberOfPages= numberPages(size,pageSize);
         this.realSize= numberOfPages*pageSize;
         this.pageTable=new Page[this.numberOfPages];
