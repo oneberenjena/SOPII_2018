@@ -16,6 +16,8 @@ public class Memory {
     private int memorySize;
     private int usedSpace;
     private Page inMemory[];
+    private int dispPages;
+    private List<Process> waitingProcess;
 
     /**
      * Constructor for memory
@@ -31,7 +33,8 @@ public class Memory {
         this.pageNumber = pageNumber;
         this.pageSize = blockSize;
         this.pageList = new ArrayList<Page>();
-
+        this.dispPages =pageNumber;
+        this.waitingProcess= new ArrayList<Process>();
         int iBlock;
         for (int i = 0; i < pageNumber; i++) {
             iBlock =  i; 
@@ -70,8 +73,22 @@ public class Memory {
     /*
     */
 
-    private void addProcessToMemory(Process process, int i){
-        int disp= getfreeMemory();
+    private void addProcess(Process process){
+
+        if (dispPages>=process.getNumberOfPages()){
+            for(int i = 0; i < process.getNumberOfPages(); i++) {
+            //aqui debo agregar el proceso a la memoria pagina por pagina 
+            }
+        }else{
+            // Coloco los procesos en una cola de espera 
+            this.waitingProcess.add(process);
+        }
+
+    }
+
+    /*
+    */
+    private void deleteProcessFromMemory(){
 
     }
 
