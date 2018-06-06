@@ -174,12 +174,6 @@ public class MemoryInterface extends JPanel {
         processNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
         processNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-<<<<<<< HEAD
-    processSizeLabel.setText("Tamaño de Proceso (MB)"); 
-    processSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
-    processSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-=======
->>>>>>> 5e49dc2b24602499fc2c3e06e8528ffb40fceada
 
 
         processSizeLabel.setText("Tamaño de Proceso"); 
