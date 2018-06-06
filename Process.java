@@ -5,7 +5,7 @@
  *
  * @version     1.0 May 2018 
  * @author      Amanda Camacho,
-                Benjamin Amos <benjamin.oxi@gmail.com>
+ *               Benjamin Amos <benjamin.oxi@gmail.com>
  */
 public class Process {
     private int pid;
@@ -35,7 +35,7 @@ public class Process {
      * 
      * @return int process id
      */
-    public int PID(){
+    public int pid(){
         return this.pid;
     }
 
