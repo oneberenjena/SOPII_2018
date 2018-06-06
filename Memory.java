@@ -32,9 +32,9 @@ public class Memory {
         this.pageSize = blockSize;
         this.pageList = new ArrayList<Page>();
 
-        String iBlock;
+        int iBlock;
         for (int i = 0; i < pageNumber; i++) {
-            iBlock = "000" + i; 
+            iBlock =  i; 
             this.pageList.add(new Page(iBlock, blockSize));    
         }
     }
@@ -57,6 +57,7 @@ public class Memory {
         return this.pageNumber;
     }
 
+
     /**
      * Retrieves memory space used in MB
      * 
@@ -64,6 +65,14 @@ public class Memory {
      */
     public int getUsedSpace(){
         return this.memorySize - this.usedSpace;
+    }
+
+    /*
+    */
+
+    private void addProcessToMemory(Process process, int i){
+        int disp= getfreeMemory();
+
     }
 
     //funcion auxiliar para hacer pruebas
