@@ -26,9 +26,15 @@ public class Process {
      * @param name       Name that process will have
      * @param size       Size in MB that process will use
      */
+<<<<<<< HEAD
     public Process(String name, int size, int pageSize){
 //        this.pid = (int) (Math.random() * 100);
         this.pid = (int) (Math.random() * 10000);
+=======
+    public Process(String name, int size){
+        this.pid = (int) (Math.random() * 100);
+        // this.pid = (int) (Math.random() * 10000);
+>>>>>>> 5fb09d4388c467c4238ce0108df06c57a7b40d8f
         this.name = name;
         this.size = size;
         this.status = 0; 
