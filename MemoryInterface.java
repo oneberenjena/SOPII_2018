@@ -36,7 +36,7 @@ public class MemoryInterface extends JPanel {
     memorySizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
 
-    memoryPageSizeLabel.setText("Tamaño de paginas"); 
+    memoryPageSizeLabel.setText("Tamaño de paginas (MB)"); 
     memoryPageSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
     memoryPageSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -101,7 +101,7 @@ public class MemoryInterface extends JPanel {
     processNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
 
-    processSizeLabel.setText("Tamaño de Proceso"); 
+    processSizeLabel.setText("Tamaño de Proceso (MB)"); 
     processSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
     processSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
@@ -162,6 +162,9 @@ public class MemoryInterface extends JPanel {
    static JPanel crearPanelLista() {
 
     /*  PANEL DE CONFIGURACION DE PROCESOS*/
+    // JPanel fila2 = new JPanel();
+    // String fila2Title = "Fila 2";
+    // fila2.title = fila2Title.substring(fila2Title.lastIndexOf('.')+1);
     JPanel panelProcessList = new JPanel();
     String processTitle = "Lista de Procesos " ;
     

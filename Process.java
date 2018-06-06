@@ -23,7 +23,7 @@ public class Process {
      */
     public Process(String name, int size){
         this.pid = (int) (Math.random() * 100);
-        this.pid = (int) (Math.random() * 10000);
+        // this.pid = (int) (Math.random() * 10000);
         this.name = name;
         this.size = size;
         this.status = 0; 
