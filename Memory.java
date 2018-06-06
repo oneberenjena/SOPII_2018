@@ -3,11 +3,10 @@ import java.util.List;
 
 /**
  * 
- * Memory class for simulating OS memory management.  
+ * Memory class for simulating OS memory management.
  * 
- * @version     1.0 May 2018 
- * @author      Amanda Camacho,  
- *               Benjamin Amos   <benjamin.oxi@gmail.com>                
+ * @version 1.0 May 2018
+ * @author Amanda Camacho, Benjamin Amos <benjamin.oxi@gmail.com>
  */
 public class Memory {
     private List<Page> pageList;
@@ -22,65 +21,80 @@ public class Memory {
     /**
      * Constructor for memory
      * 
-     * @param size        Size in MB that memory will have
-     * @param pageNumber  Total memory pages
-     * @param blockSize   Size in MB that pages will have
+     * @param size       Size in MB that memory will have
+     * @param pageNumber Total memory pages
+     * @param blockSize  Size in MB that pages will have
      */
 
-    public Memory(int size, int pageNumber, int blockSize){
+    public Memory(int size, int pageNumber, int blockSize) {
         this.memorySize = size;
         this.usedSpace = 0;
         this.pageNumber = pageNumber;
         this.pageSize = blockSize;
         this.pageList = new ArrayList<Page>();
-        this.dispPages =pageNumber;
-        this.waitingProcess= new ArrayList<Process>();
+        this.dispPages = pageNumber;
+        this.waitingProcess = new ArrayList<Process>();
         int iBlock;
         for (int i = 0; i < pageNumber; i++) {
-            iBlock =  i; 
-            this.pageList.add(new Page(iBlock, blockSize));    
+            iBlock = i;
+            this.pageList.add(new Page(iBlock, blockSize));
         }
     }
 
     /**
      * Retrieves total memory size in MB
      * 
-     * @return int  Memory size in MB
+     * @return int Memory size in MB
      */
-    public int getMemorySize(){
+    public int getMemorySize() {
         return this.memorySize;
     }
 
     /**
      * Retrieves memory pages number
      * 
-     * @return int  Memory pages number
+     * @return int Memory pages number
      */
-    public int getPageNumber(){
+    public int getPageNumber() {
         return this.pageNumber;
     }
-
 
     /**
      * Retrieves memory space used in MB
      * 
-     * @return int  Memory space used in MB
+     * @return int Memory space used in MB
      */
-    public int getUsedSpace(){
+    public int getUsedSpace() {
         return this.usedSpace;
     }
 
     /*
     */
 
-    private void addProcess(Process process){
+    public synchronized void addProcess(Process process) {
+        int pagesToUse = process.getNumberOfPages();
+        int processSize = process.getSize();
 
-        if (dispPages>=process.getNumberOfPages()){
-            for(int i = 0; i < process.getNumberOfPages(); i++) {
-            //aqui debo agregar el proceso a la memoria pagina por pagina 
+        if (this.dispPages >= pagesToUse) {
+            // Si requiere una sola pagina
+            if (pagesToUse == 1) {
+                Page freePage = this.getFreeBlock();
+                freePage.assignProcess(process, processSize);
+                this.auxUsedMemory(this.pageSize);
+                this.dispPages--;
+            } else if (pagesToUse > 1) {
+                // Si requiere mas de una pagina
+                List<Page> freePages = getFreeBlocks(processSize);
+                int processSizeLeft = processSize;
+                for (Page freePage : freePages) {
+                    freePage.assignProcess(process, processSizeLeft);
+                    this.auxUsedMemory(this.pageSize);
+                    processSizeLeft -= freePage.size();
+                    this.dispPages--;
+                }
             }
-        }else{
-            // Coloco los procesos en una cola de espera 
+        } else {
+            // Coloco los procesos en una cola de espera
             this.waitingProcess.add(process);
         }
 
@@ -88,29 +102,27 @@ public class Memory {
 
     /*
     */
-    private void deleteProcessFromMemory(){
+    private void deleteProcessFromMemory() {
 
     }
 
-
-
-     /*
+    /*
     */
-    public int getUsedPages(){
-        return this.pageNumber-this.dispPages; 
+    public int getUsedPages() {
+        return this.pageNumber - this.dispPages;
     }
 
-    //funcion auxiliar para hacer pruebas
-    public void auxUsedMemory(int newUsedSpace ){
+    // funcion auxiliar para hacer pruebas
+    public void auxUsedMemory(int newUsedSpace) {
         this.usedSpace += newUsedSpace;
     }
 
     /**
      * Retrieves memory space free in MB
      * 
-     * @return int  Memory space free in MB
+     * @return int Memory space free in MB
      */
-    public int getfreeMemory(){
+    public int getfreeMemory() {
         return this.memorySize - this.usedSpace;
     }
 
@@ -126,10 +138,9 @@ public class Memory {
     /**
      * Retrieves first free memory block
      * 
-     * @return Page Free memory block or null if there are not
-     *               any free blocks
+     * @return Page Free memory block or null if there are not any free blocks
      */
-    public Page getFreeBlock(){
+    public Page getFreeBlock() {
         Page currentPage = null;
         for (int i = 0; i < this.pageNumber; i++) {
             currentPage = this.pageList.get(i);
@@ -146,16 +157,16 @@ public class Memory {
      * 
      * size in MB requirements
      * 
-     * @param  pSize      Process size
+     * @param pSize Process size
      * @return List<Page> Free memory blocks list
      */
     public List<Page> getFreeBlocks(int pSize) {
         ArrayList<Page> pages = new ArrayList<Page>();
-        
-        int i = 0;                   // Index
-        int pSizeLeft = pSize;       // Process size tracker 
-		List<Page> pageList = pages; // Memory pages list
-        Page currentPage = null;     // Page in use
+
+        int i = 0; // Index
+        int pSizeLeft = pSize; // Process size tracker
+        List<Page> pageList = pages; // Memory pages list
+        Page currentPage = null; // Page in use
 
         while (pSizeLeft > 0) {
             currentPage = this.pageList.get(i);
@@ -171,5 +182,5 @@ public class Memory {
     public Page[] getInMemory() {
         return inMemory;
     }
-    
+
 }

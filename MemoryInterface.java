@@ -731,6 +731,7 @@ public class MemoryInterface extends JPanel {
             this.process[countProcess] = new Process(nameProc, sizeProc,memory.getPageSize());
             // Lo agrego a memoria 
             memory.auxUsedMemory(sizeProc);
+            memory.addProcess(this.process[countProcess]);
             //no tengo funcion para esto todavia 
             alertArea.append(" Se ha creado el proceso "+nameProc+", con PID "+Integer.toString(this.process[countProcess].getPid())+"\n");
             countProcess++;
@@ -843,7 +844,8 @@ public class MemoryInterface extends JPanel {
         // Vuelvo a cargar desde la lista de procesos que tengo global
 
          for (int i = 0; i < countProcess; i++) {
-            Object[] row = {process[i].getPid(), process[i].getName(), process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
+            // Object[] row = {process[i].getPid(), process[i].getName(), process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
+            Object[] row = {process[i].getPid(), process[i].getName(), process[i].getSize(),process[i].getNumberOfPages(), process[i].printPages(),process[i].status()};
             model.addRow(row); 
         }
     }

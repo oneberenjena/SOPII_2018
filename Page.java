@@ -81,7 +81,8 @@ public class Page {
      */
     public void assignProcess(Process process, int pSize){
         this.processInPage = process;
-        this.usedSpace = this.size - pSize;
+        this.usedSpace = pSize;
+        process.addPage(this);
     }
 
     /**

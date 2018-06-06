@@ -1,13 +1,14 @@
 import static java.lang.Math.ceil;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 
- * Process class for simulating process in memory.
- *  not real process are being used.
+ * Process class for simulating process in memory. not real process are being
+ * used.
  *
- * @version     1.0 May 2018 
- * @author      Amanda Camacho,
- *               Benjamin Amos <benjamin.oxi@gmail.com>
+ * @version 1.0 May 2018
+ * @author Amanda Camacho, Benjamin Amos <benjamin.oxi@gmail.com>
  */
 public class Process {
     private int pid;
@@ -15,35 +16,37 @@ public class Process {
     private int size;
     private String name;
     private int status;
-    private int memoryTime;     // Tiempo que lleva en la memoria 
-    private int totalTime;      // Tiempo total que debe estar en la memoria
-    private int runningTime;    // Tiempo que lleva corriendo.
-    private Page pageTable[];
+    private int memoryTime; // Tiempo que lleva en la memoria
+    private int totalTime; // Tiempo total que debe estar en la memoria
+    private int runningTime; // Tiempo que lleva corriendo.
+    // private Page pageTable[];
+    private List<Page> pageTable;
     private int numberOfPages;
     private int realSize;
-    
+
     /**
      * Constructor for process
      * 
-     * @param name       Name that process will have
-     * @param size       Size in MB that process will use
+     * @param name Name that process will have
+     * @param size Size in MB that process will use
      */
-    public Process(String name, int size,int pageSize){
+    public Process(String name, int size, int pageSize) {
         this.pid = (int) (Math.random() * 100);
         // this.pid = (int) (Math.random() * 10000);
         this.name = name;
         this.size = size;
-        this.status = 0; 
+        this.status = 0;
         this.memoryTime = 0;
-        this.totalTime=100000;
-        this.runningTime=0;
-        this.numberOfPages= numberPages(size,pageSize);
-        this.realSize= numberOfPages*pageSize;
-        this.pageTable=new Page[this.numberOfPages];
+        this.totalTime = 100000;
+        this.runningTime = 0;
+        this.numberOfPages = (size % pageSize != 0) ? (int) (ceil(size / pageSize) + 1) : size / pageSize; // this.numberPages(size,pageSize);
+        this.realSize = numberOfPages * pageSize;
+        // this.pageTable = new Page[this.numberOfPages];
+        this.pageTable = new ArrayList<Page>();
     }
 
     /**
-     cantidad de paginas usadas por el proceso 
+     * cantidad de paginas usadas por el proceso
      */
 
     private int numberPages(int size, int pageSize) {
@@ -51,12 +54,13 @@ public class Process {
             return (int) (ceil(size / pageSize) + 1);
         return size / pageSize;
     }
+
     /**
      * Retrieves process id
      * 
      * @return int process id
      */
-    public int getPid(){
+    public int getPid() {
         return this.pid;
     }
 
@@ -65,7 +69,7 @@ public class Process {
      * 
      * @return int Time that process will use memory
      */
-    public int executionTime(){
+    public int executionTime() {
         return this.executionTime;
     }
 
@@ -74,7 +78,7 @@ public class Process {
      * 
      * @return int Memory size in MB
      */
-    public int getSize(){
+    public int getSize() {
         return this.size;
     }
 
@@ -93,13 +97,13 @@ public class Process {
      * @return String process status
      */
     public String status() {
-        if (this.status == 1){
+        if (this.status == 1) {
             return "Listo";
-        } else if (this.status == 2){
+        } else if (this.status == 2) {
             return "Bloqueado";
-        } else if (this.status == 3){
+        } else if (this.status == 3) {
             return "Bloqueado/Listo";
-        } else if (this.status == 0){
+        } else if (this.status == 0) {
             return "Finalizado";
         }
         return "";
@@ -110,7 +114,7 @@ public class Process {
      * 
      * @return int Process time in memory
      */
-    public int memoryTime(){
+    public int memoryTime() {
         return this.memoryTime;
     }
 
@@ -119,43 +123,45 @@ public class Process {
      * 
      * @return true if process needs memory time, otherwise false
      */
-    public boolean isInMemory(){
-        return this.memoryTime > 0; 
+    public boolean isInMemory() {
+        return this.memoryTime > 0;
     }
 
     /**
      */
-    public int getNumberOfPages(){
-        return this.numberOfPages; 
+    public int getNumberOfPages() {
+        return this.numberOfPages;
     }
-
 
     /**
      */
-    public int getStatus(){
-        return status; 
+    public int getStatus() {
+        return status;
     }
 
-    public Page[] getPageTable() {
-        return pageTable;
+    // public Page[] getPageTable() {
+    public List<Page> getPageTable() {
+        return this.pageTable;
     }
 
-    public void setPageTable(Page[] pageTable) {
+    public void setPageTable(List<Page> pageTable) {
         this.pageTable = pageTable;
     }
 
-    public void setProcessStatus(int status){
-        this.status=status;
+    public void addPage(Page page){
+        this.pageTable.add(page);
     }
 
-
+    public void setProcessStatus(int status) {
+        this.status = status;
+    }
 
     /**
      * Just for printing process info in a nice way
      * 
      * @return String with process info
      */
-    public String toString(){
+    public String toString() {
         String stringName = this.pid + " Process " + this.name + ".\n";
         String stringInfo = "In Memory: " + this.isInMemory() + ".\n";
         String stringInfo2 = "Process Status: " + this.status + "\n";
@@ -164,5 +170,13 @@ public class Process {
         String stringInfo5 = "Proccess Size: " + this.size + ".\n";
 
         return stringName + stringInfo + stringInfo2 + stringInfo3 + stringInfo4 + stringInfo5;
+    }
+
+    public String printPages(){
+        String pages = "";
+        for (Page page : this.pageTable) {
+            pages += String.valueOf(page.id()) + " ";
+        }
+        return pages;
     }
 }
