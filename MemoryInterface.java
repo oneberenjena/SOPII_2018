@@ -8,19 +8,16 @@ import static javax.swing.GroupLayout.Alignment.LEADING;
 import static javax.swing.GroupLayout.Alignment.TRAILING;
 import javax.swing.table.DefaultTableModel;
 
-
-
 /**
  * 
- * Memory class for simulating OS memory management.  
+ * Memory class for simulating OS memory management.
  * 
- * @version     1.0 May 2018 
- * @author      Amanda Camacho,  <ajmandi94@gmail.com>  
- *               Benjamin Amos   <benjamin.oxi@gmail.com>                
+ * @version 1.0 May 2018
+ * @author Amanda Camacho, <ajmandi94@gmail.com> Benjamin Amos
+ *         <benjamin.oxi@gmail.com>
  */
 
 public class MemoryInterface extends JPanel {
-
 
     private Memory memory;
     private Process process[];
@@ -31,20 +28,19 @@ public class MemoryInterface extends JPanel {
     private JPanel panelFila2;
     private JPanel panelFila3;
 
-  
-    private JPanel memoryConf ;
+    private JPanel memoryConf;
     private JLabel memorySizeLabel;
-    private JTextField memorySize ;
+    private JTextField memorySize;
     private JLabel memoryPageSizeLabel;
-    private JTextField memoryPageSize ;
+    private JTextField memoryPageSize;
     private JButton saveMemoryConf;
 
-    private JPanel processConf ;
+    private JPanel processConf;
     private JLabel processNameLabel;
-    private JTextField processName ;
+    private JTextField processName;
     private JLabel processSizeLabel;
-    private JTextField processSize ;
-    private JButton saveProcessConf ;
+    private JTextField processSize;
+    private JButton saveProcessConf;
 
     private JPanel statisticsPanel;
     private JLabel labelMemory1;
@@ -60,51 +56,46 @@ public class MemoryInterface extends JPanel {
     private JLabel labelPagesSize1;
     private JLabel labelPagesSize2;
 
-
     private JPanel panelProcessList;
     private JTable processTable;
     private JScrollPane processScroll;
 
-    private JPanel panelProcessStatus ;
-    private JButton suspendProcess ;
-    private JButton deleteProcess ;
-    private JButton readyProcess ;
-    private JButton lockProcess ;
+    private JPanel panelProcessStatus;
+    private JButton suspendProcess;
+    private JButton deleteProcess;
+    private JButton readyProcess;
+    private JButton lockProcess;
 
     private JPanel panelMemoryStatus;
     private JTable memoryTable;
     private JScrollPane memoryScroll;
 
     private JPanel graphicsPanel;
-    private JTextArea alertArea ;
+    private JTextArea alertArea;
     private JScrollPane scrollAlertArea;
-
 
     /**
      * Constructor for memory panel
      * 
      */
-  
-    private  JPanel crearPanelMemoria() {
 
-        /*  PANEL DE CONFIGURACION DE MEMORIA */
+    private JPanel crearPanelMemoria() {
 
-        String titulo = "Configuracion de Memoria " ;
+        /* PANEL DE CONFIGURACION DE MEMORIA */
 
-        titulo = titulo.substring( titulo.lastIndexOf('.')+1 );
-        memoryConf.setBorder( new TitledBorder( titulo ) );
+        String titulo = "Configuracion de Memoria ";
+
+        titulo = titulo.substring(titulo.lastIndexOf('.') + 1);
+        memoryConf.setBorder(new TitledBorder(titulo));
         memoryConf.setPreferredSize(new Dimension(300, 200));
 
-
         memorySizeLabel.setText("Tamaño de memoria ");
-        memorySizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
+        memorySizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         memorySizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-
-        memoryPageSizeLabel.setText("Tamaño de paginas"); 
-        memoryPageSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
+        memoryPageSizeLabel.setText("Tamaño de paginas");
+        memoryPageSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         memoryPageSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-
 
         memorySize.setText("15360");
         memorySize.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +110,6 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-
         saveMemoryConf.setText("Crear Memoria");
         saveMemoryConf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,32 +117,27 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-
         GroupLayout layout = new GroupLayout(memoryConf);
         memoryConf.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
         GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-        hGroup.addGroup(layout.createParallelGroup().
-                addComponent(memorySizeLabel).addComponent(memoryPageSizeLabel).addComponent(saveMemoryConf));
-        hGroup.addGroup(layout.createParallelGroup().
-                addComponent(memorySize).addComponent(memoryPageSize));
+        hGroup.addGroup(layout.createParallelGroup().addComponent(memorySizeLabel).addComponent(memoryPageSizeLabel)
+                .addComponent(saveMemoryConf));
+        hGroup.addGroup(layout.createParallelGroup().addComponent(memorySize).addComponent(memoryPageSize));
         layout.setHorizontalGroup(hGroup);
-
 
         GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 
-        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(memorySizeLabel).addComponent(memorySize));
-        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(memoryPageSizeLabel).addComponent(memoryPageSize));
-        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(saveMemoryConf));
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(memorySizeLabel)
+                .addComponent(memorySize));
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(memoryPageSizeLabel)
+                .addComponent(memoryPageSize));
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(saveMemoryConf));
         layout.setVerticalGroup(vGroup);
 
-
-        return(memoryConf);
+        return (memoryConf);
     }
 
     /**
@@ -162,22 +147,20 @@ public class MemoryInterface extends JPanel {
 
     private JPanel crearPanelProcesos() {
 
-        /*  PANEL DE CONFIGURACION DE PROCESOS*/
-        String tituloProceso = "Configuracion de Procesos " ;
+        /* PANEL DE CONFIGURACION DE PROCESOS */
+        String tituloProceso = "Configuracion de Procesos ";
 
-        tituloProceso = tituloProceso.substring( tituloProceso.lastIndexOf('.')+1 );
-        processConf.setBorder( new TitledBorder( tituloProceso ) );
+        tituloProceso = tituloProceso.substring(tituloProceso.lastIndexOf('.') + 1);
+        processConf.setBorder(new TitledBorder(tituloProceso));
         processConf.setPreferredSize(new Dimension(300, 200));
 
-
         processNameLabel.setText("Nombre del Proceso");
-        processNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
+        processNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         processNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        processSizeLabel.setText("Tamaño de Proceso (MB)"); 
-        processSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); 
+        processSizeLabel.setText("Tamaño de Proceso (MB)");
+        processSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         processSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-
 
         processName.setText("Proceso1");
 
@@ -194,9 +177,8 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-
         saveProcessConf.setText("Crear Proceso");
-        //No se puede crear un proceso si la memoria no ha sido creada 
+        // No se puede crear un proceso si la memoria no ha sido creada
         saveProcessConf.setEnabled(false);
         saveProcessConf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,32 +186,30 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-
         GroupLayout layoutProcess = new GroupLayout(processConf);
         processConf.setLayout(layoutProcess);
         layoutProcess.setAutoCreateGaps(true);
         layoutProcess.setAutoCreateContainerGaps(true);
 
         GroupLayout.SequentialGroup hGroup = layoutProcess.createSequentialGroup();
-        hGroup.addGroup(layoutProcess.createParallelGroup().
-                addComponent(processNameLabel).addComponent(processSizeLabel).addComponent(saveProcessConf));
-        hGroup.addGroup(layoutProcess.createParallelGroup().
-                addComponent(processName).addComponent(processSize));
+        hGroup.addGroup(layoutProcess.createParallelGroup().addComponent(processNameLabel)
+                .addComponent(processSizeLabel).addComponent(saveProcessConf));
+        hGroup.addGroup(layoutProcess.createParallelGroup().addComponent(processName).addComponent(processSize));
         layoutProcess.setHorizontalGroup(hGroup);
 
         GroupLayout.SequentialGroup vGroup = layoutProcess.createSequentialGroup();
 
-        vGroup.addGroup(layoutProcess.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(processNameLabel).addComponent(processName));
-        vGroup.addGroup(layoutProcess.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(processSizeLabel).addComponent(processSize));
-        vGroup.addGroup(layoutProcess.createParallelGroup(GroupLayout.Alignment.BASELINE).
-            addComponent(saveProcessConf));
+        vGroup.addGroup(layoutProcess.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(processNameLabel)
+                .addComponent(processName));
+        vGroup.addGroup(layoutProcess.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(processSizeLabel)
+                .addComponent(processSize));
+        vGroup.addGroup(
+                layoutProcess.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(saveProcessConf));
         layoutProcess.setVerticalGroup(vGroup);
 
-        /*  PANEL DE CONFIGURACION DE PROCESOS*/
+        /* PANEL DE CONFIGURACION DE PROCESOS */
 
-        return(processConf);
+        return (processConf);
     }
 
     /**
@@ -239,11 +219,11 @@ public class MemoryInterface extends JPanel {
 
     private JPanel crearPanelEstadisticas() {
 
-        /*  PANEL DE CONFIGURACION DE PROCESOS*/
-        String tituloEstadisticas = "Estadisticas " ;
+        /* PANEL DE CONFIGURACION DE PROCESOS */
+        String tituloEstadisticas = "Estadisticas ";
 
-        tituloEstadisticas = tituloEstadisticas.substring( tituloEstadisticas.lastIndexOf('.')+1 );
-        statisticsPanel.setBorder( new TitledBorder( tituloEstadisticas ) );
+        tituloEstadisticas = tituloEstadisticas.substring(tituloEstadisticas.lastIndexOf('.') + 1);
+        statisticsPanel.setBorder(new TitledBorder(tituloEstadisticas));
         statisticsPanel.setPreferredSize(new Dimension(300, 200));
 
         labelMemory1.setText("Tamaño de la memoria");
@@ -281,41 +261,37 @@ public class MemoryInterface extends JPanel {
         labelPagesSize2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         labelPagesSize2.setText("-");
 
-
         GroupLayout layoutStatistics = new GroupLayout(statisticsPanel);
         statisticsPanel.setLayout(layoutStatistics);
         layoutStatistics.setAutoCreateGaps(true);
         layoutStatistics.setAutoCreateContainerGaps(true);
 
-
         GroupLayout.SequentialGroup hGroup = layoutStatistics.createSequentialGroup();
-        hGroup.addGroup(layoutStatistics.createParallelGroup().
-                addComponent(labelMemory1).addComponent(labelAvailableMemory1).addComponent(labelUsedMemory1)
-                .addComponent(labelNumberProcess1).addComponent(labelUsedPages1).addComponent(labelPagesSize1));
-        hGroup.addGroup(layoutStatistics.createParallelGroup().
-                addComponent(labelMemory2).addComponent(labelAvailableMemory2).addComponent(labelUsedMemory2)
-                .addComponent(labelNumberProcess2).addComponent(labelUsedPages2).addComponent(labelPagesSize2));
+        hGroup.addGroup(layoutStatistics.createParallelGroup().addComponent(labelMemory1)
+                .addComponent(labelAvailableMemory1).addComponent(labelUsedMemory1).addComponent(labelNumberProcess1)
+                .addComponent(labelUsedPages1).addComponent(labelPagesSize1));
+        hGroup.addGroup(layoutStatistics.createParallelGroup().addComponent(labelMemory2)
+                .addComponent(labelAvailableMemory2).addComponent(labelUsedMemory2).addComponent(labelNumberProcess2)
+                .addComponent(labelUsedPages2).addComponent(labelPagesSize2));
         layoutStatistics.setHorizontalGroup(hGroup);
-
 
         GroupLayout.SequentialGroup vGroup = layoutStatistics.createSequentialGroup();
 
-        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(labelMemory1).addComponent(labelMemory2));
-        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(labelAvailableMemory1).addComponent(labelAvailableMemory2));
-        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(labelUsedMemory1).addComponent(labelUsedMemory2));
-        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(labelNumberProcess1).addComponent(labelNumberProcess2));
-        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(labelUsedPages1).addComponent(labelUsedPages2));
-        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).
-                addComponent(labelPagesSize1).addComponent(labelPagesSize2));
+        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(labelMemory1)
+                .addComponent(labelMemory2));
+        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(labelAvailableMemory1).addComponent(labelAvailableMemory2));
+        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(labelUsedMemory1).addComponent(labelUsedMemory2));
+        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(labelNumberProcess1).addComponent(labelNumberProcess2));
+        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(labelUsedPages1).addComponent(labelUsedPages2));
+        vGroup.addGroup(layoutStatistics.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(labelPagesSize1).addComponent(labelPagesSize2));
         layoutStatistics.setVerticalGroup(vGroup);
 
-
-        return(statisticsPanel);
+        return (statisticsPanel);
     }
 
     /**
@@ -325,27 +301,20 @@ public class MemoryInterface extends JPanel {
 
     private JPanel crearPanelListaProc() {
 
-        /*  PANEL DE LISTA DE PROCESOS*/
-        String processTitle = "Lista de Procesos " ;
+        /* PANEL DE LISTA DE PROCESOS */
+        String processTitle = "Lista de Procesos ";
 
-        processTitle = processTitle.substring( processTitle.lastIndexOf('.')+1 );
-        panelProcessList.setBorder( new TitledBorder( processTitle ) );
+        processTitle = processTitle.substring(processTitle.lastIndexOf('.') + 1);
+        panelProcessList.setBorder(new TitledBorder(processTitle));
         panelProcessList.setPreferredSize(new Dimension(700, 200));
 
-        processTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        processTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
 
-            },
-            new String [] {
-                "PID", "Nombre", "Tamaño", "Páginas", "Pag. en memoria","Estado"
-            }
-        ){
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
+        }, new String[] { "PID", "Nombre", "Tamaño", "Páginas", "Pag. en memoria", "Estado" }) {
+            boolean[] canEdit = new boolean[] { false, false, false, false, false, false };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
 
@@ -372,24 +341,18 @@ public class MemoryInterface extends JPanel {
             processTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        GroupLayout processTableLayout = new GroupLayout(panelProcessList); 
+        GroupLayout processTableLayout = new GroupLayout(panelProcessList);
         processTableLayout.setAutoCreateGaps(true);
         processTableLayout.setAutoCreateContainerGaps(true);
         panelProcessList.setLayout(processTableLayout);
 
-        processTableLayout.setHorizontalGroup(processTableLayout
-            .createSequentialGroup()
-            .addGroup(
-                processTableLayout.createParallelGroup(LEADING).addComponent(processScroll)));
+        processTableLayout.setHorizontalGroup(processTableLayout.createSequentialGroup()
+                .addGroup(processTableLayout.createParallelGroup(LEADING).addComponent(processScroll)));
 
-        processTableLayout.setVerticalGroup(processTableLayout
-            .createSequentialGroup()
-            .addGroup(
-                processTableLayout.createParallelGroup(BASELINE).addComponent(processScroll)));
+        processTableLayout.setVerticalGroup(processTableLayout.createSequentialGroup()
+                .addGroup(processTableLayout.createParallelGroup(BASELINE).addComponent(processScroll)));
 
-
-
-        return(panelProcessList);
+        return (panelProcessList);
     }
 
     /**
@@ -398,14 +361,12 @@ public class MemoryInterface extends JPanel {
      */
 
     private JPanel crearPanelEstadoProc() {
-        /*  PANEL DE  ESTADOS DE PROCESOS*/
-        String processStatusTitle = "Estado de procesos " ;
+        /* PANEL DE ESTADOS DE PROCESOS */
+        String processStatusTitle = "Estado de procesos ";
 
-        processStatusTitle = processStatusTitle.substring( processStatusTitle.lastIndexOf('.')+1 );
-        panelProcessStatus.setBorder( new TitledBorder( processStatusTitle ) );
+        processStatusTitle = processStatusTitle.substring(processStatusTitle.lastIndexOf('.') + 1);
+        panelProcessStatus.setBorder(new TitledBorder(processStatusTitle));
         panelProcessStatus.setPreferredSize(new Dimension(200, 200));
-
-
 
         suspendProcess.setText("Suspender");
         suspendProcess.setEnabled(false);
@@ -441,63 +402,45 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-        GroupLayout processStatusLayout = new GroupLayout(panelProcessStatus); 
+        GroupLayout processStatusLayout = new GroupLayout(panelProcessStatus);
         processStatusLayout.setAutoCreateGaps(true);
         processStatusLayout.setAutoCreateContainerGaps(true);
         panelProcessStatus.setLayout(processStatusLayout);
 
+        processStatusLayout.setHorizontalGroup(processStatusLayout.createSequentialGroup()
+                .addGroup(processStatusLayout.createParallelGroup(LEADING).addComponent(suspendProcess)
+                        .addComponent(deleteProcess).addComponent(readyProcess).addComponent(lockProcess)));
 
-        processStatusLayout.setHorizontalGroup(processStatusLayout
-            .createSequentialGroup()
-            .addGroup(
-                processStatusLayout.createParallelGroup(LEADING).addComponent(suspendProcess)
-                    .addComponent(deleteProcess)
-                    .addComponent(readyProcess)
-                    .addComponent(lockProcess)));
+        processStatusLayout.setVerticalGroup(processStatusLayout.createSequentialGroup()
+                .addGroup(processStatusLayout.createParallelGroup(BASELINE).addComponent(suspendProcess))
+                .addGroup(processStatusLayout.createParallelGroup(BASELINE).addComponent(deleteProcess))
+                .addGroup(processStatusLayout.createParallelGroup(BASELINE).addComponent(readyProcess))
+                .addGroup(processStatusLayout.createParallelGroup(BASELINE).addComponent(lockProcess)));
 
-        processStatusLayout.setVerticalGroup(processStatusLayout
-            .createSequentialGroup()
-            .addGroup(
-                processStatusLayout.createParallelGroup(BASELINE).addComponent(suspendProcess))
-            .addGroup(
-                processStatusLayout.createParallelGroup(BASELINE).addComponent(deleteProcess))
-            .addGroup(
-                processStatusLayout.createParallelGroup(BASELINE).addComponent(readyProcess))
-            .addGroup(
-                processStatusLayout.createParallelGroup(BASELINE).addComponent(lockProcess)));
-
-
-        return(panelProcessStatus);
+        return (panelProcessStatus);
     }
 
     /**
-     * Constructor for memory list  panel
+     * Constructor for memory list panel
      * 
      */
 
     private JPanel crearPanelListaMemory() {
 
-        /*  PANEL DE  ESTADOS DE PROCESOS*/
-        String memoryStatusTitle = "Estado de la Memoria " ;
+        /* PANEL DE ESTADOS DE PROCESOS */
+        String memoryStatusTitle = "Estado de la Memoria ";
 
-        memoryStatusTitle = memoryStatusTitle.substring( memoryStatusTitle.lastIndexOf('.')+1 );
-        panelMemoryStatus.setBorder( new TitledBorder( memoryStatusTitle ) );
+        memoryStatusTitle = memoryStatusTitle.substring(memoryStatusTitle.lastIndexOf('.') + 1);
+        panelMemoryStatus.setBorder(new TitledBorder(memoryStatusTitle));
         panelMemoryStatus.setPreferredSize(new Dimension(600, 200));
 
-        memoryTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        memoryTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
 
-            },
-            new String [] {
-                "Direccion Fisica ", "ID pagina", "PID", "Nombre Proceso", "Num. Paginas"
-            }
-        ){
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
+        }, new String[] { "Direccion Fisica ", "ID pagina", "PID", "Nombre Proceso", "Num. Paginas" }) {
+            boolean[] canEdit = new boolean[] { false, false, false, false, false };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
 
@@ -511,23 +454,18 @@ public class MemoryInterface extends JPanel {
             memoryTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        GroupLayout memoryTableLayout = new GroupLayout(panelMemoryStatus); 
+        GroupLayout memoryTableLayout = new GroupLayout(panelMemoryStatus);
         memoryTableLayout.setAutoCreateGaps(true);
         memoryTableLayout.setAutoCreateContainerGaps(true);
         panelMemoryStatus.setLayout(memoryTableLayout);
 
-        memoryTableLayout.setHorizontalGroup(memoryTableLayout
-            .createSequentialGroup()
-            .addGroup(
-                memoryTableLayout.createParallelGroup(LEADING).addComponent(memoryScroll)));
+        memoryTableLayout.setHorizontalGroup(memoryTableLayout.createSequentialGroup()
+                .addGroup(memoryTableLayout.createParallelGroup(LEADING).addComponent(memoryScroll)));
 
-        memoryTableLayout.setVerticalGroup(memoryTableLayout
-            .createSequentialGroup()
-            .addGroup(
-                memoryTableLayout.createParallelGroup(BASELINE).addComponent(memoryScroll)));
+        memoryTableLayout.setVerticalGroup(memoryTableLayout.createSequentialGroup()
+                .addGroup(memoryTableLayout.createParallelGroup(BASELINE).addComponent(memoryScroll)));
 
-
-        return(panelMemoryStatus);
+        return (panelMemoryStatus);
     }
 
     /**
@@ -537,11 +475,11 @@ public class MemoryInterface extends JPanel {
 
     private JPanel graphics() {
 
-        /*  PANEL DE  ESTADOS DE PROCESOS*/
-        String graphicsTitle = "Gráficos de estado " ;
+        /* PANEL DE ESTADOS DE PROCESOS */
+        String graphicsTitle = "Gráficos de estado ";
 
-        graphicsTitle = graphicsTitle.substring( graphicsTitle.lastIndexOf('.')+1 );
-        graphicsPanel.setBorder( new TitledBorder( graphicsTitle ) );
+        graphicsTitle = graphicsTitle.substring(graphicsTitle.lastIndexOf('.') + 1);
+        graphicsPanel.setBorder(new TitledBorder(graphicsTitle));
         graphicsPanel.setPreferredSize(new Dimension(300, 200));
 
         alertArea.setColumns(25);
@@ -550,31 +488,29 @@ public class MemoryInterface extends JPanel {
 
         graphicsPanel.add(scrollAlertArea);
 
-        return(graphicsPanel);
-    }   
+        return (graphicsPanel);
+    }
 
     /**
-     * Constructor for all panels 
+     * Constructor for all panels
      * 
      */
-  
+
     public MemoryInterface() {
 
         memoryConf = new JPanel();
-        memorySizeLabel= new JLabel();
+        memorySizeLabel = new JLabel();
         memorySize = new JTextField();
-        memoryPageSizeLabel= new JLabel();
+        memoryPageSizeLabel = new JLabel();
         memoryPageSize = new JTextField();
         saveMemoryConf = new JButton();
 
-
         processConf = new JPanel();
-        processNameLabel= new JLabel();
+        processNameLabel = new JLabel();
         processName = new JTextField();
-        processSizeLabel= new JLabel();
+        processSizeLabel = new JLabel();
         processSize = new JTextField();
         saveProcessConf = new JButton();
-
 
         statisticsPanel = new JPanel();
         labelMemory1 = new JLabel();
@@ -589,7 +525,6 @@ public class MemoryInterface extends JPanel {
         labelUsedPages2 = new JLabel();
         labelPagesSize1 = new JLabel();
         labelPagesSize2 = new JLabel();
-
 
         panelProcessList = new JPanel();
         processTable = new JTable();
@@ -607,61 +542,56 @@ public class MemoryInterface extends JPanel {
 
         graphicsPanel = new JPanel();
         alertArea = new JTextArea();
-        scrollAlertArea= new javax.swing.JScrollPane();
-
+        scrollAlertArea = new javax.swing.JScrollPane();
 
         JPanel allPanel = new JPanel();
-        /*String allPanelTitle = " Panel completo " ;
-        allPanelTitle = allPanelTitle.substring( allPanelTitle.lastIndexOf('.')+1 );
-        allPanel.setBorder( new TitledBorder( allPanelTitle ) );
-        */
+        /*
+         * String allPanelTitle = " Panel completo " ; allPanelTitle =
+         * allPanelTitle.substring( allPanelTitle.lastIndexOf('.')+1 );
+         * allPanel.setBorder( new TitledBorder( allPanelTitle ) );
+         */
         JPanel panelFila1 = new JPanel();
-        /*String tituloFila1 = "Fila 1 " ;
-        tituloFila1 = tituloFila1.substring( tituloFila1.lastIndexOf('.')+1 );
-        panelFila1.setBorder( new TitledBorder( tituloFila1 ) );
-        */
+        /*
+         * String tituloFila1 = "Fila 1 " ; tituloFila1 = tituloFila1.substring(
+         * tituloFila1.lastIndexOf('.')+1 ); panelFila1.setBorder( new TitledBorder(
+         * tituloFila1 ) );
+         */
 
-        panelFila1.add( crearPanelMemoria() );
-        panelFila1.add( crearPanelProcesos() );
-        panelFila1.add( crearPanelEstadisticas() );
+        panelFila1.add(crearPanelMemoria());
+        panelFila1.add(crearPanelProcesos());
+        panelFila1.add(crearPanelEstadisticas());
 
         JPanel panelFila2 = new JPanel();
-        /*String tituloFila2 = "Fila 2 " ;
-        tituloFila2 = tituloFila2.substring( tituloFila2.lastIndexOf('.')+1 );
-        panelFila2.setBorder( new TitledBorder( tituloFila2 ) );
-        */
+        /*
+         * String tituloFila2 = "Fila 2 " ; tituloFila2 = tituloFila2.substring(
+         * tituloFila2.lastIndexOf('.')+1 ); panelFila2.setBorder( new TitledBorder(
+         * tituloFila2 ) );
+         */
         panelFila2.add(crearPanelListaProc());
         panelFila2.add(crearPanelEstadoProc());
 
         JPanel panelFila3 = new JPanel();
-        /*String tituloFila3 = "Fila 3 " ;
-        tituloFila3 = tituloFila3.substring( tituloFila3.lastIndexOf('.')+1 );
-        panelFila3.setBorder( new TitledBorder( tituloFila3 ) );
-        */
+        /*
+         * String tituloFila3 = "Fila 3 " ; tituloFila3 = tituloFila3.substring(
+         * tituloFila3.lastIndexOf('.')+1 ); panelFila3.setBorder( new TitledBorder(
+         * tituloFila3 ) );
+         */
         panelFila3.add(crearPanelListaMemory());
         panelFila3.add(graphics());
 
-        GroupLayout groupLayout = 
-        new GroupLayout(allPanel); 
+        GroupLayout groupLayout = new GroupLayout(allPanel);
         groupLayout.setAutoCreateGaps(true);
         groupLayout.setAutoCreateContainerGaps(true);
         allPanel.setLayout(groupLayout);
 
-        groupLayout.setHorizontalGroup(groupLayout
-            .createSequentialGroup()
-            .addGroup(
-                groupLayout.createParallelGroup(LEADING).addComponent(panelFila1)
-                    .addComponent(panelFila2)
-                    .addComponent(panelFila3)));
+        groupLayout.setHorizontalGroup(
+                groupLayout.createSequentialGroup().addGroup(groupLayout.createParallelGroup(LEADING)
+                        .addComponent(panelFila1).addComponent(panelFila2).addComponent(panelFila3)));
 
-        groupLayout.setVerticalGroup(groupLayout
-            .createSequentialGroup()
-            .addGroup(
-                groupLayout.createParallelGroup(BASELINE).addComponent(panelFila1))
-            .addGroup(
-                groupLayout.createParallelGroup(BASELINE).addComponent(panelFila2))
-            .addGroup(
-                groupLayout.createParallelGroup(BASELINE).addComponent(panelFila3)));
+        groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
+                .addGroup(groupLayout.createParallelGroup(BASELINE).addComponent(panelFila1))
+                .addGroup(groupLayout.createParallelGroup(BASELINE).addComponent(panelFila2))
+                .addGroup(groupLayout.createParallelGroup(BASELINE).addComponent(panelFila3)));
 
         add(allPanel);
 
@@ -673,14 +603,14 @@ public class MemoryInterface extends JPanel {
      */
 
     private void saveMemoryConfActionPerformed(java.awt.event.ActionEvent evt) {
-        int sizeMem= Integer.parseInt(memorySize.getText());
+        int sizeMem = Integer.parseInt(memorySize.getText());
         int sizePag = Integer.parseInt(memoryPageSize.getText());
         System.out.println(sizeMem);
         if ((sizeMem % 2) == 0 && (sizePag % 2) == 0) {
-            if (sizeMem > sizePag){
+            if (sizeMem > sizePag) {
 
-                int pages = sizeMem/ sizePag;
-                memory = new Memory(sizeMem,pages,sizePag);
+                int pages = sizeMem / sizePag;
+                memory = new Memory(sizeMem, pages, sizePag);
                 this.process = new Process[memory.getPageNumber()];
                 alertArea.append("Se ha creado la memoria\n");
                 saveMemoryConf.setEnabled(false);
@@ -693,27 +623,28 @@ public class MemoryInterface extends JPanel {
                 updateMemoryTable();
                 saveProcessConf.setEnabled(true);
 
-            }else{
+            } else {
                 alertArea.append("Tamaño de pagina mayor al de la memoria \n ");
             }
-        }else{
+        } else {
             alertArea.append("Tamaño de la memoria o de la pagina\n debe ser multiplo de \n");
-        }    
+        }
     }
 
     /**
-     * Function 
+     * Function
      * 
      */
 
-    private void memorySizeActionPerformed(java.awt.event.ActionEvent evt){
+    private void memorySizeActionPerformed(java.awt.event.ActionEvent evt) {
 
     }
+
     /**
-     * Function 
+     * Function
      * 
      */
-    private void memoryPageSizeActionPerformed(java.awt.event.ActionEvent evt){
+    private void memoryPageSizeActionPerformed(java.awt.event.ActionEvent evt) {
 
     }
 
@@ -722,23 +653,24 @@ public class MemoryInterface extends JPanel {
      * 
      */
 
-    private void saveProcessConfAction(java.awt.event.ActionEvent evt){
-        String nameProc= processName.getText();
+    private void saveProcessConfAction(java.awt.event.ActionEvent evt) {
+        String nameProc = processName.getText();
         int sizeProc = Integer.parseInt(processSize.getText());
         System.out.println(nameProc);
-        if ( sizeProc<= memory.getfreeMemory()){
-            //creo el proceso
-            this.process[countProcess] = new Process(nameProc, sizeProc,memory.getPageSize());
-            // Lo agrego a memoria 
-            memory.auxUsedMemory(sizeProc);
+        if (sizeProc <= memory.getfreeMemory()) {
+            // creo el proceso
+            this.process[countProcess] = new Process(nameProc, sizeProc, memory.getPageSize());
+            // Lo agrego a memoria
             memory.addProcess(this.process[countProcess]);
-            //no tengo funcion para esto todavia 
-            alertArea.append(" Se ha creado el proceso "+nameProc+", con PID "+Integer.toString(this.process[countProcess].getPid())+"\n");
+            // no tengo funcion para esto todavia
+            // ahora si
+            alertArea.append(" Se ha creado el proceso " + nameProc + ", con PID "
+                    + Integer.toString(this.process[countProcess].getPid()) + "\n");
             countProcess++;
             labelNumberProcess2.setText(Integer.toString(countProcess));
             updateProcessTable();
             update();
-        }else{
+        } else {
             alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso");
         }
 
@@ -749,43 +681,43 @@ public class MemoryInterface extends JPanel {
      * 
      */
     private void processSizeActionPerformed(java.awt.event.ActionEvent evt) {
-        
+
     }
 
     /**
-     * Function 
+     * Function
      */
 
     private void processNameActionPerformed(java.awt.event.ActionEvent evt) {
-        
-    }
-    //#########################################################################
-    //#########################################################################
 
-
-    private void processTableFocusLost(java.awt.event.FocusEvent evt){
-        
     }
-    private void  processTableMouseClicked(java.awt.event.MouseEvent evt){
+    // #########################################################################
+    // #########################################################################
+
+    private void processTableFocusLost(java.awt.event.FocusEvent evt) {
+
+    }
+
+    private void processTableMouseClicked(java.awt.event.MouseEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
-        alertArea.append(Integer.toString(row)+"\n");
+        alertArea.append(Integer.toString(row) + "\n");
         String status = process[row].status();
-        alertArea.append(status+"\n");
+        alertArea.append(status + "\n");
         deleteProcess.setEnabled(true);
-        if (status == "Listo" ) {
+        if (status == "Listo") {
             readyProcess.setEnabled(false);
             suspendProcess.setEnabled(true);
             lockProcess.setEnabled(true);
-        } else if(status == "Bloqueado/Listo") {
+        } else if (status == "Bloqueado/Listo") {
             suspendProcess.setEnabled(false);
             readyProcess.setEnabled(true);
             lockProcess.setEnabled(false);
-        } else if(status == "Bloqueado") {
+        } else if (status == "Bloqueado") {
             lockProcess.setEnabled(false);
             suspendProcess.setEnabled(true);
             readyProcess.setEnabled(true);
-        } else if (status == "Eliminado"){
+        } else if (status == "Eliminado") {
             suspendProcess.setEnabled(false);
             readyProcess.setEnabled(false);
             deleteProcess.setEnabled(false);
@@ -793,49 +725,56 @@ public class MemoryInterface extends JPanel {
         }
     }
 
-    //#########################################################################
-    //#########################################################################
+    // #########################################################################
+    // #########################################################################
 
-
-    private void suspendProcessActionPerformed(java.awt.event.ActionEvent evt){
+    private void suspendProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
 
     }
 
-    private void deleteProcessActioPerformed(java.awt.event.ActionEvent evt){
+    private void deleteProcessActioPerformed(java.awt.event.ActionEvent evt) {
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+
+        this.memory.killProcess(selectedPid);
+
+        // DefaultTableModel model = (DefaultTableModel) processTable.getModel();
+        // model.removeRow(row);
+        // updateProcessTable();
+        // update();
+        
+    }
+
+    private void readyProcessActionPerformed(java.awt.event.ActionEvent evt) {
+        int row = processTable.getSelectedRow();
+        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+
+    }
+
+    private void lockProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
     }
 
-    private void readyProcessActionPerformed(java.awt.event.ActionEvent evt){
-        int row = processTable.getSelectedRow();
-        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+    // ########################################################################
+    // ########################################################################
 
-    }
-    private void lockProcessActionPerformed(java.awt.event.ActionEvent evt){
-        int row = processTable.getSelectedRow();
-        int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
-    }
+    private void updateMemoryTable() {
 
-    //########################################################################
-    //########################################################################
-
-
-    private void updateMemoryTable(){
-
-        //Elimino todas las filas 
+        // Elimino todas las filas
         DefaultTableModel model = (DefaultTableModel) memoryTable.getModel();
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
 
-        // Vuelvo a cargar desde lo que me dice la memoria que tiene 
+        // Vuelvo a cargar desde lo que me dice la memoria que tiene
     }
 
-    private void updateProcessTable(){
+    private void updateProcessTable() {
 
-        //Elimino todas las filas 
+        // Elimino todas las filas
         DefaultTableModel model = (DefaultTableModel) processTable.getModel();
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
@@ -843,14 +782,16 @@ public class MemoryInterface extends JPanel {
 
         // Vuelvo a cargar desde la lista de procesos que tengo global
 
-         for (int i = 0; i < countProcess; i++) {
-            // Object[] row = {process[i].getPid(), process[i].getName(), process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
-            Object[] row = {process[i].getPid(), process[i].getName(), process[i].getSize(),process[i].getNumberOfPages(), process[i].printPages(),process[i].status()};
-            model.addRow(row); 
+        for (int i = 0; i < countProcess; i++) {
+            // Object[] row = {process[i].getPid(), process[i].getName(),
+            // process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
+            Object[] row = { process[i].getPid(), process[i].getName(), process[i].getSize(),
+                    process[i].getNumberOfPages(), process[i].printPages(), process[i].status() };
+            model.addRow(row);
         }
     }
 
-    private void update(){
+    private void update() {
         labelUsedMemory2.setText(Integer.toString(memory.getUsedSpace()));
         labelAvailableMemory2.setText(Integer.toString(memory.getfreeMemory()));
         labelUsedPages2.setText(Integer.toString(memory.getUsedPages()));
@@ -862,15 +803,15 @@ public class MemoryInterface extends JPanel {
      * 
      */
 
-    public static void main( String args[] ) {
-        JFrame frame = new JFrame( "Simulador de memoria" );
-        frame.addWindowListener( new WindowAdapter() {
-            public void windowClosing( WindowEvent evt ) {
-            System.exit( 0 );
+    public static void main(String args[]) {
+        JFrame frame = new JFrame("Simulador de memoria");
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+                System.exit(0);
             }
         });
-        frame.getContentPane().add( new MemoryInterface(),BorderLayout.WEST );
-        frame.setSize( 950,700 );
-        frame.setVisible( true );
+        frame.getContentPane().add(new MemoryInterface(), BorderLayout.WEST);
+        frame.setSize(950, 700);
+        frame.setVisible(true);
     }
 }

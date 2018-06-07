@@ -102,8 +102,8 @@ public class Memory {
 
     /*
     */
-    private void deleteProcessFromMemory() {
-
+    private void deleteProcessFromMemory(int pid) {
+        
     }
 
     /*
@@ -183,4 +183,19 @@ public class Memory {
         return inMemory;
     }
 
+    public void killProcess(int pid){
+        Process toKill;
+        System.out.format("Eliminando proceso con PID:%d%n", pid);
+        for (Page page : this.pageList) {
+            // System.out.println(page);
+            if (page.whichProcess() == pid) {
+                System.out.format("Eliminando de la pagina con ID:%d%n", page.id());
+                toKill = page.processInPage();
+                toKill.killProccess();
+                page.freeSpace();
+                this.dispPages++;
+            } 
+        }
+        return;
+    }
 }

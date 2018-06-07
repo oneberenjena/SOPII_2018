@@ -109,6 +109,18 @@ public class Process {
         return "";
     }
 
+    public int statusInt(){
+        return this.status;
+    }
+
+    public void killProccess(){
+        if (this.status != 0) {
+            this.status =  0;
+            this.pageTable.clear();
+        }
+        return;
+    }
+
     /**
      * Retrieves process time in memory
      * 
@@ -148,7 +160,7 @@ public class Process {
         this.pageTable = pageTable;
     }
 
-    public void addPage(Page page){
+    public void addPage(Page page) {
         this.pageTable.add(page);
     }
 
@@ -172,7 +184,7 @@ public class Process {
         return stringName + stringInfo + stringInfo2 + stringInfo3 + stringInfo4 + stringInfo5;
     }
 
-    public String printPages(){
+    public String printPages() {
         String pages = "";
         for (Page page : this.pageTable) {
             pages += String.valueOf(page.id()) + " ";

@@ -74,6 +74,14 @@ public class Page {
         return (this.processInPage == null) ? false : true;
     }
 
+    public int whichProcess(){
+        return this.processInPage != null ? this.processInPage.getPid() : -1;
+    }
+
+    public Process processInPage(){
+        return this.processInPage;
+    }
+
     /**
      * Allows a process to use this block of memory
      * 
@@ -94,7 +102,12 @@ public class Page {
         String pageName = "Page starting at: " + Integer.toString(this.pageId) + ".\n";
         String pageInfo = "Page size: " + this.size + ".\n";
         String pageInfo1 = "Page usedSpace: " + this.usedSpace + ".\n";
-        String pageInfo2 = "Process using space: " + this.processInPage.getPid() + ".\n";
+        String pageInfo2 = "";
+        if (this.processInPage != null) {
+            pageInfo2 = "Process using space: " + this.processInPage.getPid() + ".\n";
+        } else {
+            pageInfo2 = "Process using space: Ninguno.\n";
+        }
         
         return pageName + pageInfo + pageInfo1 + pageInfo2;
     }
