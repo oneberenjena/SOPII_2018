@@ -714,7 +714,7 @@ public class MemoryInterface extends JPanel {
         deleteProcess.setEnabled(true);
         if (status == "Listo") {
             readyProcess.setEnabled(false);
-            suspendProcess.setEnabled(true);
+            suspendProcess.setEnabled(false);
             lockProcess.setEnabled(true);
         } else if (status == "Bloqueado/Listo") {
             suspendProcess.setEnabled(false);
@@ -722,7 +722,7 @@ public class MemoryInterface extends JPanel {
             lockProcess.setEnabled(false);
         } else if (status == "Bloqueado") {
             lockProcess.setEnabled(false);
-            suspendProcess.setEnabled(true);
+            suspendProcess.setEnabled(false);
             readyProcess.setEnabled(true);
         } else if (status == "Eliminado") {
             suspendProcess.setEnabled(false);
@@ -738,7 +738,14 @@ public class MemoryInterface extends JPanel {
     private void suspendProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
-
+        int status = 3;
+        // se debe parar el tiempo de ejecucion
+        for (Process pro : this.process) {
+            if (pro.getPid() == selectedPid) {
+                pro.setStatus(status);
+            }
+        }
+        updateProcessTable();
     }
 
     private void deleteProcessActioPerformed(java.awt.event.ActionEvent evt) {
@@ -746,9 +753,11 @@ public class MemoryInterface extends JPanel {
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
 
         boolean wasInMemory = this.memory.killProcess(selectedPid);
+        int status = 0;
 
         for (Process pro : this.process) {
             if (pro.getPid() == selectedPid) {
+                pro.setStatus(status);
                 this.process.remove(pro);
                 break;
             }
@@ -770,11 +779,29 @@ public class MemoryInterface extends JPanel {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
 
+        int status = 1;
+        // se debe colocar en la cola de listos
+        for (Process pro : this.process) {
+            if (pro.getPid() == selectedPid) {
+                pro.setStatus(status);
+            }
+        }
+        updateProcessTable();
     }
 
     private void lockProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+        
+        int status = 2;
+        // se debe parar el tiempo de ejecucion
+        for (Process pro : this.process) {
+            if (pro.getPid() == selectedPid) {
+                pro.setStatus(status);
+            }
+        }
+        updateProcessTable();
+    
     }
 
     // ########################################################################

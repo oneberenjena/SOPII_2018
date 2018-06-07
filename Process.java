@@ -35,7 +35,7 @@ public class Process {
         // this.pid = (int) (Math.random() * 10000);
         this.name = name;
         this.size = size;
-        this.status = 0;
+        this.status = 1;
         this.memoryTime = 0;
         this.totalTime = 100000;
         this.runningTime = 0;
@@ -97,20 +97,24 @@ public class Process {
      * @return String process status
      */
     public String status() {
-        if (this.status == 1) {
+        if (this.status == 0) {
+            return "Finalizado";
+        } else if (this.status == 1) {
             return "Listo";
         } else if (this.status == 2) {
             return "Bloqueado";
-        } else if (this.status == 3) {
-            return "Bloqueado/Listo";
-        } else if (this.status == 0) {
-            return "Finalizado";
+        }  else if (this.status == 3) {
+            return "Ejecucion";
         }
         return "";
     }
 
     public int statusInt(){
         return this.status;
+    }
+
+    public void setStatus(int status){
+        this.status = status;
     }
 
     public void killProccess(){
