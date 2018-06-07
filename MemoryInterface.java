@@ -7,6 +7,8 @@ import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
 import static javax.swing.GroupLayout.Alignment.TRAILING;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 
@@ -20,7 +22,8 @@ import javax.swing.table.DefaultTableModel;
 public class MemoryInterface extends JPanel {
 
     private Memory memory;
-    private Process process[];
+    // private Process process[];
+    private List<Process> process;
     private int countProcess = 0;
 
     private JPanel allPanel;
@@ -611,7 +614,7 @@ public class MemoryInterface extends JPanel {
 
                 int pages = sizeMem / sizePag;
                 memory = new Memory(sizeMem, pages, sizePag);
-                this.process = new Process[memory.getPageNumber()];
+                this.process = new ArrayList<Process>(); //new Process[memory.getPageNumber()];
                 alertArea.append("Se ha creado la memoria\n");
                 saveMemoryConf.setEnabled(false);
                 labelMemory2.setText(Integer.toString(sizeMem));
@@ -659,13 +662,16 @@ public class MemoryInterface extends JPanel {
         System.out.println(nameProc);
         if (sizeProc <= memory.getfreeMemory()) {
             // creo el proceso
-            this.process[countProcess] = new Process(nameProc, sizeProc, memory.getPageSize());
+            // this.process.get(countProcess) = new Process(nameProc, sizeProc, memory.getPageSize());
+            this.process.add(new Process(nameProc, sizeProc, memory.getPageSize()));
             // Lo agrego a memoria
-            memory.addProcess(this.process[countProcess]);
+            // memory.addProcess(this.process[countProcess]);
+            memory.addProcess(this.process.get(countProcess));
             // no tengo funcion para esto todavia
             // ahora si
             alertArea.append(" Se ha creado el proceso " + nameProc + ", con PID "
-                    + Integer.toString(this.process[countProcess].getPid()) + "\n");
+                    // + Integer.toString(this.process[countProcess].getPid()) + "\n");
+                    + Integer.toString(this.process.get(countProcess).getPid()) + "\n");
             countProcess++;
             labelNumberProcess2.setText(Integer.toString(countProcess));
             updateProcessTable();
@@ -702,7 +708,8 @@ public class MemoryInterface extends JPanel {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
         alertArea.append(Integer.toString(row) + "\n");
-        String status = process[row].status();
+        // String status = process[row].status();
+        String status = process.get(row).status();
         alertArea.append(status + "\n");
         deleteProcess.setEnabled(true);
         if (status == "Listo") {
@@ -738,12 +745,17 @@ public class MemoryInterface extends JPanel {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
 
-        this.memory.killProcess(selectedPid);
+        boolean wasInMemory = this.memory.killProcess(selectedPid);
 
-        // DefaultTableModel model = (DefaultTableModel) processTable.getModel();
-        // model.removeRow(row);
-        // updateProcessTable();
-        // update();
+        DefaultTableModel model = (DefaultTableModel) processTable.getModel();
+        model.removeRow(row);
+
+        if (wasInMemory) {
+            countProcess--;
+            labelNumberProcess2.setText(Integer.toString(countProcess));
+        }
+        updateProcessTable();
+        update();
         
     }
 
@@ -781,12 +793,17 @@ public class MemoryInterface extends JPanel {
         }
 
         // Vuelvo a cargar desde la lista de procesos que tengo global
-
-        for (int i = 0; i < countProcess; i++) {
-            // Object[] row = {process[i].getPid(), process[i].getName(),
-            // process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
-            Object[] row = { process[i].getPid(), process[i].getName(), process[i].getSize(),
-                    process[i].getNumberOfPages(), process[i].printPages(), process[i].status() };
+        
+        // for (int i = 0; i < countProcess; i++) {
+        //     // Object[] row = {process[i].getPid(), process[i].getName(),
+        //     // process[i].getSize(),"paginas", "PaginasMem",process[i].status()};
+        //     Object[] row = { process[i].getPid(), process[i].getName(), process[i].getSize(),
+        //             process[i].getNumberOfPages(), process[i].printPages(), process[i].status() };
+        //     model.addRow(row);
+        // }
+        for (Process pro : process) {
+            Object[] row = { pro.getPid(), pro.getName(), pro.getSize(),
+                    pro.getNumberOfPages(), pro.printPages(), pro.status() };
             model.addRow(row);
         }
     }
