@@ -747,6 +747,13 @@ public class MemoryInterface extends JPanel {
 
         boolean wasInMemory = this.memory.killProcess(selectedPid);
 
+        for (Process pro : this.process) {
+            if (pro.getPid() == selectedPid) {
+                this.process.remove(pro);
+                break;
+            }
+        }
+
         DefaultTableModel model = (DefaultTableModel) processTable.getModel();
         model.removeRow(row);
 
