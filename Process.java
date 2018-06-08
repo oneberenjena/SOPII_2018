@@ -35,7 +35,7 @@ public class Process {
         this.pid = (int) (Math.random() * 10000);
         this.name = name;
         this.size = size;
-        this.status = 1;
+        this.status = 3;
         this.memoryTime = 0;
         // this.totalTime = 100000;
         this.totalTime = (int) (Math.random() * 1000000000);
@@ -44,6 +44,23 @@ public class Process {
         this.realSize = numberOfPages * pageSize;
         // this.pageTable = new Page[this.numberOfPages];
         this.pageTable = new ArrayList<Page>();
+    }
+
+
+
+
+    public void runningProcess(){
+        while (true) {
+            totalTime -- ;
+            runningTime ++;
+            if (totalTime <= 0){
+                totalTime = 0;
+            }
+        }
+    }
+
+    public int getTotalTime() {
+        return this.totalTime;
     }
 
     /**

@@ -9,14 +9,14 @@ import java.util.List;
  * @author Amanda Camacho, Benjamin Amos <benjamin.oxi@gmail.com>
  */
 public class Memory {
-    private List<Page> pageList;
+    private ArrayList<Page> pageList;
     private int pageNumber;
     private int pageSize;
     private int memorySize;
     private int usedSpace;
     private Page inMemory[];
     private int dispPages;
-    private List<Process> waitingProcess;
+    private ArrayList<Process> waitingProcess;
 
     /**
      * Constructor for memory
@@ -26,7 +26,7 @@ public class Memory {
      * @param blockSize  Size in MB that pages will have
      */
 
-    public Memory(int size, int pageNumber, int blockSize) {
+    public  Memory(int size, int pageNumber, int blockSize) {
         this.memorySize = size;
         this.usedSpace = 0;
         this.pageNumber = pageNumber;
@@ -82,7 +82,7 @@ public class Memory {
                 freePage.assignProcess(process, processSize);
                 this.auxUsedMemory(this.pageSize);
                 this.dispPages--;
-
+                //process.runningProcess();
             // Si requiere mas de una pagina
             } else if (pagesToUse > 1) {
                 List<Page> freePages = getFreeBlocks(processSize);
@@ -93,6 +93,8 @@ public class Memory {
                     processSizeLeft -= freePage.size();
                     this.dispPages--;
                 }
+                //process.runningProcess();
+
             }
         } else {
             // Coloco los procesos en una cola de espera
@@ -101,11 +103,9 @@ public class Memory {
 
     }
 
-    /*
-    */
-    private void deleteProcessFromMemory(int pid) {
 
-    }
+
+
 
     /*
     */
@@ -184,8 +184,8 @@ public class Memory {
         return pageList;
     }
 
-    public Page[] getInMemory() {
-        return inMemory;
+    public ArrayList<Page> getInMemory() {
+        return this.pageList;
     }
 
     public boolean killProcess(int pid) {
