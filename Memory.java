@@ -82,8 +82,9 @@ public class Memory {
                 freePage.assignProcess(process, processSize);
                 this.auxUsedMemory(this.pageSize);
                 this.dispPages--;
+
+            // Si requiere mas de una pagina
             } else if (pagesToUse > 1) {
-                // Si requiere mas de una pagina
                 List<Page> freePages = getFreeBlocks(processSize);
                 int processSizeLeft = processSize;
                 for (Page freePage : freePages) {
@@ -103,7 +104,7 @@ public class Memory {
     /*
     */
     private void deleteProcessFromMemory(int pid) {
-        
+
     }
 
     /*
@@ -117,7 +118,7 @@ public class Memory {
         this.usedSpace += newUsedSpace;
     }
 
-    public void freeSpace(int used){
+    public void freeSpace(int used) {
         this.usedSpace -= used;
     }
 
@@ -187,7 +188,7 @@ public class Memory {
         return inMemory;
     }
 
-    public boolean killProcess(int pid){
+    public boolean killProcess(int pid) {
         Process toKill;
         boolean wasInMemory = false;
         System.out.format("Eliminando proceso con PID:%d%n", pid);
@@ -200,7 +201,7 @@ public class Memory {
                 this.dispPages++;
                 this.freeSpace(this.pageSize);
                 wasInMemory = true;
-            } 
+            }
         }
         return wasInMemory;
     }

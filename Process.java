@@ -31,13 +31,14 @@ public class Process {
      * @param size Size in MB that process will use
      */
     public Process(String name, int size, int pageSize) {
-        this.pid = (int) (Math.random() * 100);
-        // this.pid = (int) (Math.random() * 10000);
+        // this.pid = (int) (Math.random() * 100);
+        this.pid = (int) (Math.random() * 10000);
         this.name = name;
         this.size = size;
         this.status = 1;
         this.memoryTime = 0;
-        this.totalTime = 100000;
+        // this.totalTime = 100000;
+        this.totalTime = (int) (Math.random() * 1000000000);
         this.runningTime = 0;
         this.numberOfPages = (size % pageSize != 0) ? (int) (ceil(size / pageSize) + 1) : size / pageSize; // this.numberPages(size,pageSize);
         this.realSize = numberOfPages * pageSize;
