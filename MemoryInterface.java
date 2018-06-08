@@ -23,6 +23,7 @@ public class MemoryInterface extends JPanel {
 
     private Memory memory;
     // private Process process[];
+    private MemoryInterface memoryInterface = this;
     private List<Process> process;
     private int countProcess = 0;
 
@@ -609,7 +610,8 @@ public class MemoryInterface extends JPanel {
             if (sizeMem > sizePag) {
 
                 int pages = sizeMem / sizePag;
-                memory = new Memory(sizeMem, pages, sizePag);
+                memory = new Memory(sizeMem, pages, sizePag, memoryInterface);
+                memory.start();
                 this.process = new ArrayList<Process>(); //new Process[memory.getPageNumber()];
                 alertArea.append("Se ha creado la memoria\n");
                 saveMemoryConf.setEnabled(false);
@@ -651,7 +653,6 @@ public class MemoryInterface extends JPanel {
      * Function for save process botton action
      * 
      */
-
     private void saveProcessConfAction(java.awt.event.ActionEvent evt) {
         String nameProc = processName.getText();
         int sizeProc = Integer.parseInt(processSize.getText());
@@ -659,7 +660,8 @@ public class MemoryInterface extends JPanel {
         if (sizeProc <= memory.getfreeMemory()) {
             // creo el proceso
             // this.process.get(countProcess) = new Process(nameProc, sizeProc, memory.getPageSize());
-            this.process.add(new Process(nameProc, sizeProc, memory.getPageSize()));
+            Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize()); 
+            this.process.add(newProcess);
             // Lo agrego a memoria
             
             // memory.addProcess(this.process[countProcess]);
@@ -814,13 +816,13 @@ public class MemoryInterface extends JPanel {
             model.removeRow(i);
         }
         ArrayList<Page> auxPages= memory.getInMemory();
-        System.out.println(auxPages);
+        // System.out.println(auxPages);
         // Vuelvo a cargar desde lo que me dice la memoria que tiene
 
         for (int i=0;i<auxPages.size();i++) {
             if ( auxPages.get(i).hasProcess()){
                 Object[] row = { "0x"+Integer.toHexString(auxPages.get(i).id()), auxPages.get(i).id(),
-                    auxPages.get(i).processInPage().getPid(), auxPages.get(i).processInPage().getName(), 
+                    auxPages.get(i).processInPage().getPid(), auxPages.get(i).processInPage().name(), 
                     auxPages.get(i).processInPage().getNumberOfPages() };
                     model.addRow(row);
             }else{
@@ -833,25 +835,33 @@ public class MemoryInterface extends JPanel {
         
     }
 
-    private void updateProcessTable() {
-
+    private synchronized void updateProcessTable() {
+        System.out.format("Process list size is %d%n", process.size());
         // Elimino todas las filas
         DefaultTableModel model = (DefaultTableModel) processTable.getModel();
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            System.out.format("Print innecesario en la vuelta %d de las columnas%n", i);
             model.removeRow(i);
         }
 
         for (Process pro : process) {
-            Object[] row = { pro.getPid(), pro.getName(), pro.getSize(),
-                    pro.getNumberOfPages(), pro.printPages(), pro.status() };
-            model.addRow(row);
+            if (pro.getStatus() != 0) {
+                Object[] row = { pro.getPid(), pro.name(), pro.getSize(),
+                        pro.getNumberOfPages(), pro.printPages(), pro.status() };
+                model.addRow(row);
+            } else {
+                // System.out.println(process.toArray().toString());
+                // process.remove(pro);
+                // countProcess = process.size();
+            }
         }
     }
 
-    public void update() {
+    public synchronized void update() {
         labelUsedMemory2.setText(Integer.toString(memory.getUsedSpace()));
         labelAvailableMemory2.setText(Integer.toString(memory.getfreeMemory()));
         labelUsedPages2.setText(Integer.toString(memory.getUsedPages()));
+        labelNumberProcess2.setText(Integer.toString(process.size()));
         updateProcessTable();
         updateMemoryTable();
     }
@@ -861,6 +871,16 @@ public class MemoryInterface extends JPanel {
      * 
      */
 
+    public void reduceCountProcess(Process pro){
+        this.process.remove(pro);
+        this.countProcess--;
+
+    }
+
+    public void addCountProcess(){
+        this.countProcess++;
+    }
+
     public static void main(String args[]) {
         JFrame frame = new JFrame("Simulador de memoria");
         frame.addWindowListener(new WindowAdapter() {
@@ -868,7 +888,8 @@ public class MemoryInterface extends JPanel {
                 System.exit(0);
             }
         });
-        frame.getContentPane().add(new MemoryInterface(), BorderLayout.WEST);
+        MemoryInterface memoryInterface = new MemoryInterface();
+        frame.getContentPane().add(memoryInterface, BorderLayout.WEST);
         frame.setSize(950, 700);
         frame.setVisible(true);
     }

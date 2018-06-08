@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @version 1.0 May 2018
  * @author Amanda Camacho, Benjamin Amos <benjamin.oxi@gmail.com>
  */
-public class Process {
+public class Process extends Thread {
     private int pid;
     private int executionTime;
     private int size;
@@ -38,29 +38,54 @@ public class Process {
         this.status = 3;
         this.memoryTime = 0;
         // this.totalTime = 100000;
-        this.totalTime = (int) (Math.random() * 1000000000);
+        this.totalTime = (int) (Math.random() * 100000);
+        // this.totalTime = (int) (Math.random() * 1000000000);
         this.runningTime = 0;
         this.numberOfPages = (size % pageSize != 0) ? (int) (ceil(size / pageSize) + 1) : size / pageSize; // this.numberPages(size,pageSize);
         this.realSize = numberOfPages * pageSize;
         // this.pageTable = new Page[this.numberOfPages];
         this.pageTable = new ArrayList<Page>();
+        new Thread(this, this.name);
     }
 
-
-
-
-    public void runningProcess(){
+    public void run() {
+        System.out.println("comence");
         while (true) {
-            totalTime -- ;
-            runningTime ++;
-            if (totalTime <= 0){
-                totalTime = 0;
+            if (this.status == 3) {
+                totalTime--;
+                runningTime++;
+                if (totalTime <= 0) {
+                    totalTime = 0;
+                }
+            }
+
+            if (totalTime == runningTime) {
+                System.out.println("termine");
+                this.status = 0;
+                break;
             }
         }
+
     }
 
     public int getTotalTime() {
         return this.totalTime;
+    }
+
+    public int getRunningTime() {
+        return this.runningTime;
+    }
+
+    public void updateRunningTime() {
+        this.runningTime++;
+    }
+
+    public void updateTotalTime() {
+        this.totalTime--;
+    }
+
+    public void setTotalTime(int time) {
+        this.totalTime = time;
     }
 
     /**
@@ -105,7 +130,7 @@ public class Process {
      * 
      * @return String Process name
      */
-    public String getName() {
+    public String name() {
         return this.name;
     }
 
@@ -121,23 +146,23 @@ public class Process {
             return "Listo";
         } else if (this.status == 2) {
             return "Bloqueado";
-        }  else if (this.status == 3) {
+        } else if (this.status == 3) {
             return "Ejecucion";
         }
         return "";
     }
 
-    public int statusInt(){
+    public int statusInt() {
         return this.status;
     }
 
-    public void setStatus(int status){
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public void killProccess(){
+    public synchronized void killProccess() {
         if (this.status != 0) {
-            this.status =  0;
+            this.status = 0;
             this.pageTable.clear();
         }
         return;

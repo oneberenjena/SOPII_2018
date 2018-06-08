@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.LinkedList;
 
 /**
  * 
@@ -8,7 +10,7 @@ import java.util.List;
  * @version 1.0 May 2018
  * @author Amanda Camacho, Benjamin Amos <benjamin.oxi@gmail.com>
  */
-public class Memory {
+public class Memory extends Thread {
     private ArrayList<Page> pageList;
     private int pageNumber;
     private int pageSize;
@@ -16,8 +18,8 @@ public class Memory {
     private int usedSpace;
     private Page inMemory[];
     private int dispPages;
-    private ArrayList<Process> waitingProcess;
-
+    private Queue<Process> waitingProcess;
+    private MemoryInterface memoryInterface;
     /**
      * Constructor for memory
      * 
@@ -26,19 +28,21 @@ public class Memory {
      * @param blockSize  Size in MB that pages will have
      */
 
-    public  Memory(int size, int pageNumber, int blockSize) {
+    public Memory(int size, int pageNumber, int blockSize, MemoryInterface memoryInterface) {
         this.memorySize = size;
         this.usedSpace = 0;
         this.pageNumber = pageNumber;
         this.pageSize = blockSize;
         this.pageList = new ArrayList<Page>();
         this.dispPages = pageNumber;
-        this.waitingProcess = new ArrayList<Process>();
+        this.waitingProcess = new LinkedList<Process>();
         int iBlock;
         for (int i = 0; i < pageNumber; i++) {
             iBlock = i;
             this.pageList.add(new Page(iBlock, blockSize));
         }
+        this.memoryInterface = memoryInterface;
+        new Thread(this, "Memory");
     }
 
     /**
@@ -82,8 +86,11 @@ public class Memory {
                 freePage.assignProcess(process, processSize);
                 this.auxUsedMemory(this.pageSize);
                 this.dispPages--;
-                //process.runningProcess();
-            // Si requiere mas de una pagina
+                // this.memoryInterface.addCountProcess();
+                process.start();
+                // Thread newThread = new Thread(this, process.name());
+                // newThread.run();
+                // Si requiere mas de una pagina
             } else if (pagesToUse > 1) {
                 List<Page> freePages = getFreeBlocks(processSize);
                 int processSizeLeft = processSize;
@@ -93,7 +100,9 @@ public class Memory {
                     processSizeLeft -= freePage.size();
                     this.dispPages--;
                 }
-                //process.runningProcess();
+                // this.memoryInterface.addCountProcess();
+                process.start();
+                // new Thread(this, process.name());
 
             }
         } else {
@@ -103,9 +112,36 @@ public class Memory {
 
     }
 
+    public void run() {
+        System.out.println("Iniciando hilo de memoria..");
+        System.out.println(this.memoryInterface);
+        while (true) {
+            for (Page page : this.pageList) {
+                if (page.hasProcess() && page.processInPage().getStatus() == 0) {
+                    this.removeProcessFromInterface(page.processInPage());
+                }
+            }
 
+            if (!this.waitingProcess.isEmpty()) {
+                Process head = this.waitingProcess.peek();
+                if (head.getSize() <= this.usedSpace) {
+                    this.addProcess(this.waitingProcess.poll());
+                } else {
+                    this.waitingProcess.add(this.waitingProcess.poll());
+                }
+                // this.memoryInterface.update();
+            }
+            
+        }
+    }
 
-
+    public synchronized void removeProcessFromInterface(Process process) {
+        System.out.format("El proceso %d termino su ejecucion. Eliminando..", process.getPid());
+        this.memoryInterface.reduceCountProcess(process);
+        this.killProcess(process.getPid());
+        System.out.println("Eliminado.");
+        this.memoryInterface.update();
+    }
 
     /*
     */
@@ -188,7 +224,7 @@ public class Memory {
         return this.pageList;
     }
 
-    public boolean killProcess(int pid) {
+    public synchronized boolean killProcess(int pid) {
         Process toKill;
         boolean wasInMemory = false;
         System.out.format("Eliminando proceso con PID:%d%n", pid);
