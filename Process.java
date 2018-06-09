@@ -60,6 +60,7 @@ public class Process extends Thread {
                 if (totalTime <= 0) {
                     totalTime = 0;
                 }
+                
             }
             if (this.status == ) {
                 System.out.println("Bloqueado");
