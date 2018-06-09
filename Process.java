@@ -53,12 +53,16 @@ public class Process extends Thread {
 
 
         while (true) {
+
             if (this.status == 3) {
                 totalTime--;
                 runningTime++;
                 if (totalTime <= 0) {
                     totalTime = 0;
                 }
+            }
+            if (this.status == ) {
+                System.out.println("Bloqueado");
             }
 
             if (totalTime == runningTime) {
