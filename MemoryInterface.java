@@ -91,7 +91,7 @@ public class MemoryInterface extends JPanel {
 
         titulo = titulo.substring(titulo.lastIndexOf('.') + 1);
         memoryConf.setBorder(new TitledBorder(titulo));
-        memoryConf.setPreferredSize(new Dimension(300, 200));
+        memoryConf.setPreferredSize(new Dimension(350, 200));
 
         memorySizeLabel.setText("Tamaño de memoria ");
         memorySizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -156,7 +156,7 @@ public class MemoryInterface extends JPanel {
 
         tituloProceso = tituloProceso.substring(tituloProceso.lastIndexOf('.') + 1);
         processConf.setBorder(new TitledBorder(tituloProceso));
-        processConf.setPreferredSize(new Dimension(300, 200));
+        processConf.setPreferredSize(new Dimension(350, 200));
 
         processNameLabel.setText("Nombre del Proceso");
         processNameLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
@@ -370,9 +370,9 @@ public class MemoryInterface extends JPanel {
 
         processStatusTitle = processStatusTitle.substring(processStatusTitle.lastIndexOf('.') + 1);
         panelProcessStatus.setBorder(new TitledBorder(processStatusTitle));
-        panelProcessStatus.setPreferredSize(new Dimension(200, 200));
+        panelProcessStatus.setPreferredSize(new Dimension(300, 200));
 
-        suspendProcess.setText("acc");
+        suspendProcess.setText("Suspender");
         suspendProcess.setEnabled(false);
 
         deleteProcess.setText("Eliminar");
@@ -384,7 +384,7 @@ public class MemoryInterface extends JPanel {
             }
         });
 
-        readyProcess.setText("Listo");
+        readyProcess.setText("Ejecutar");
         readyProcess.setEnabled(false);
 
         readyProcess.addActionListener(new java.awt.event.ActionListener() {
@@ -432,7 +432,7 @@ public class MemoryInterface extends JPanel {
 
         memoryStatusTitle = memoryStatusTitle.substring(memoryStatusTitle.lastIndexOf('.') + 1);
         panelMemoryStatus.setBorder(new TitledBorder(memoryStatusTitle));
-        panelMemoryStatus.setPreferredSize(new Dimension(600, 200));
+        panelMemoryStatus.setPreferredSize(new Dimension(600, 300));
 
         memoryTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
 
@@ -480,10 +480,10 @@ public class MemoryInterface extends JPanel {
 
         graphicsTitle = graphicsTitle.substring(graphicsTitle.lastIndexOf('.') + 1);
         graphicsPanel.setBorder(new TitledBorder(graphicsTitle));
-        graphicsPanel.setPreferredSize(new Dimension(300, 200));
+        graphicsPanel.setPreferredSize(new Dimension(400, 300));
 
-        alertArea.setColumns(25);
-        alertArea.setRows(11);
+        alertArea.setColumns(30);
+        alertArea.setRows(16);
         scrollAlertArea.setViewportView(alertArea);
 
         graphicsPanel.add(scrollAlertArea);
@@ -610,9 +610,9 @@ public class MemoryInterface extends JPanel {
             if (sizeMem > sizePag) {
 
                 int pages = sizeMem / sizePag;
-                memory = new Memory(sizeMem, pages, sizePag, memoryInterface);
+                memory = new Memory(sizeMem, pages, sizePag, memoryInterface, alertArea);
                 memory.start();
-                this.process = new ArrayList<Process>(); //new Process[memory.getPageNumber()];
+                this.process = new ArrayList<Process>(); 
                 alertArea.append("Se ha creado la memoria\n");
                 saveMemoryConf.setEnabled(false);
                 labelMemory2.setText(Integer.toString(sizeMem));
@@ -676,7 +676,7 @@ public class MemoryInterface extends JPanel {
             updateProcessTable();
             update();
         } else {
-            alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso");
+            alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso"+"\n");
         }
 
     }
@@ -706,23 +706,24 @@ public class MemoryInterface extends JPanel {
     private void processTableMouseClicked(java.awt.event.MouseEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
-        alertArea.append(Integer.toString(row) + "\n");
         // String status = process[row].status();
         String status = process.get(row).status();
-        alertArea.append(status + "\n");
         deleteProcess.setEnabled(true);
         if (status == "Listo") {
+            suspendProcess.setEnabled(false);
+            deleteProcess.setEnabled(false);
             readyProcess.setEnabled(false);
-            suspendProcess.setEnabled(false);
-            lockProcess.setEnabled(true);
-        } else if (status == "Bloqueado/Listo") {
-            suspendProcess.setEnabled(false);
-            readyProcess.setEnabled(true);
             lockProcess.setEnabled(false);
         } else if (status == "Bloqueado") {
-            lockProcess.setEnabled(false);
             suspendProcess.setEnabled(false);
+            deleteProcess.setEnabled(true);
             readyProcess.setEnabled(true);
+            lockProcess.setEnabled(false);
+        } else if (status == "Ejecucion") {
+            lockProcess.setEnabled(true);
+            suspendProcess.setEnabled(false);
+            deleteProcess.setEnabled(true);
+            readyProcess.setEnabled(false);
         } else if (status == "Eliminado") {
             suspendProcess.setEnabled(false);
             readyProcess.setEnabled(false);
@@ -733,6 +734,8 @@ public class MemoryInterface extends JPanel {
 
     // #########################################################################
     // #########################################################################
+
+    //Suspender es para utilizarlo en memoria virtual 
 
     private void suspendProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
@@ -774,12 +777,14 @@ public class MemoryInterface extends JPanel {
         
     }
 
+    //Ready es el nuevo boton, para reanudar el proceso despues que fue bloqueado
+
     private void readyProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
+        // Se coloca en ejecucion nuevamente el proceso
+        int status = 3;
 
-        int status = 1;
-        // se debe colocar en la cola de listos
         for (Process pro : this.process) {
             if (pro.getPid() == selectedPid) {
                 pro.setStatus(status);
@@ -789,11 +794,15 @@ public class MemoryInterface extends JPanel {
         update();
     }
 
+
+
+
     private void lockProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
         
         int status = 2;
+
         // se debe parar el tiempo de ejecucion
         for (Process pro : this.process) {
             if (pro.getPid() == selectedPid) {
@@ -840,7 +849,7 @@ public class MemoryInterface extends JPanel {
         // Elimino todas las filas
         DefaultTableModel model = (DefaultTableModel) processTable.getModel();
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
-            System.out.format("Print innecesario en la vuelta %d de las columnas%n", i);
+            //System.out.format("Print innecesario en la vuelta %d de las columnas%n", i);
             model.removeRow(i);
         }
 
@@ -877,9 +886,6 @@ public class MemoryInterface extends JPanel {
 
     }
 
-    public void addCountProcess(){
-        this.countProcess++;
-    }
 
     public static void main(String args[]) {
         JFrame frame = new JFrame("Simulador de memoria");
@@ -890,7 +896,7 @@ public class MemoryInterface extends JPanel {
         });
         MemoryInterface memoryInterface = new MemoryInterface();
         frame.getContentPane().add(memoryInterface, BorderLayout.WEST);
-        frame.setSize(950, 700);
+        frame.setSize(1100, 800);
         frame.setVisible(true);
     }
 }

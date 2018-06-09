@@ -38,7 +38,7 @@ public class Process extends Thread {
         this.status = 3;
         this.memoryTime = 0;
         // this.totalTime = 100000;
-        this.totalTime = (int) (Math.random() * 100000);
+        this.totalTime = (int) (Math.random() * 10000000);
         // this.totalTime = (int) (Math.random() * 1000000000);
         this.runningTime = 0;
         this.numberOfPages = (size % pageSize != 0) ? (int) (ceil(size / pageSize) + 1) : size / pageSize; // this.numberPages(size,pageSize);
@@ -50,6 +50,8 @@ public class Process extends Thread {
 
     public void run() {
         System.out.println("comence");
+
+
         while (true) {
             if (this.status == 3) {
                 totalTime--;
@@ -65,12 +67,19 @@ public class Process extends Thread {
                 break;
             }
         }
-
     }
+
+
 
     public int getTotalTime() {
         return this.totalTime;
     }
+
+    public void setTotalTime(int time) {
+        this.totalTime = time;
+    }
+
+
 
     public int getRunningTime() {
         return this.runningTime;
@@ -84,9 +93,7 @@ public class Process extends Thread {
         this.totalTime--;
     }
 
-    public void setTotalTime(int time) {
-        this.totalTime = time;
-    }
+ 
 
     /**
      * cantidad de paginas usadas por el proceso
@@ -103,6 +110,7 @@ public class Process extends Thread {
      * 
      * @return int process id
      */
+
     public int getPid() {
         return this.pid;
     }

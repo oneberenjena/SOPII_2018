@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
+import javax.swing.JTextArea;
 
 /**
  * 
@@ -20,6 +21,8 @@ public class Memory extends Thread {
     private int dispPages;
     private Queue<Process> waitingProcess;
     private MemoryInterface memoryInterface;
+    private JTextArea alertArea;
+
     /**
      * Constructor for memory
      * 
@@ -28,7 +31,7 @@ public class Memory extends Thread {
      * @param blockSize  Size in MB that pages will have
      */
 
-    public Memory(int size, int pageNumber, int blockSize, MemoryInterface memoryInterface) {
+    public Memory(int size, int pageNumber, int blockSize, MemoryInterface memoryInterface,JTextArea alertArea) {
         this.memorySize = size;
         this.usedSpace = 0;
         this.pageNumber = pageNumber;
@@ -42,6 +45,7 @@ public class Memory extends Thread {
             this.pageList.add(new Page(iBlock, blockSize));
         }
         this.memoryInterface = memoryInterface;
+        this.alertArea=alertArea;
         new Thread(this, "Memory");
     }
 
@@ -129,13 +133,13 @@ public class Memory extends Thread {
                 } else {
                     this.waitingProcess.add(this.waitingProcess.poll());
                 }
-                // this.memoryInterface.update();
             }
             
         }
     }
 
     public synchronized void removeProcessFromInterface(Process process) {
+        this.alertArea.append("El proceso "+ Integer.toString(process.getPid())+ " termino su ejecucion\n");
         System.out.format("El proceso %d termino su ejecucion. Eliminando..", process.getPid());
         this.memoryInterface.reduceCountProcess(process);
         this.killProcess(process.getPid());
