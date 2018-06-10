@@ -667,9 +667,10 @@ public class MemoryInterface extends JPanel {
             updateProcessTable();
             update();
         } else {
-            alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso" + "\n");
-            // Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize());
-            // memory.addProcess(newProcess);
+            String alert = "No hay suficiente espacio en la memoria para ejecutar el proceso.";
+			alertArea.append(alert + "\n");
+            Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize());
+            memory.queueProcess(newProcess);
         }
 
     }
@@ -820,7 +821,8 @@ public class MemoryInterface extends JPanel {
 
         for (int i = 0; i < auxPages.size(); i++) {
             if (auxPages.get(i).hasProcess()) {
-                Object[] row = { "0x" + Integer.toHexString(auxPages.get(i).id()), auxPages.get(i).id(),
+                // Object[] row = { "0x" + Integer.toHexString(auxPages.get(i).id()), auxPages.get(i).id(),
+                Object[] row = { "0x" + Integer.toHexString(i * memory.getPageSize()), auxPages.get(i).id(),
                         auxPages.get(i).processInPage().getPid(), auxPages.get(i).processInPage().name(),
                         auxPages.get(i).processInPage().getNumberOfPages() };
                 model.addRow(row);
@@ -874,6 +876,18 @@ public class MemoryInterface extends JPanel {
         this.process.remove(pro);
         this.countProcess--;
 
+    }
+
+    public synchronized void addProcessFromQueue(Process pro){
+        System.out.format("New process %s from queue with PID %d%n", pro.name(), pro.getPid());
+        this.process.add(pro);
+        memory.addProcess(this.process.get(countProcess));
+        alertArea.append(" Ingresa desde la cola el proceso " + pro.name() + ", con PID "
+                + Integer.toString(this.process.get(countProcess).getPid()) + "\n");
+        countProcess++;
+        labelNumberProcess2.setText(Integer.toString(countProcess));
+        updateProcessTable();
+        update();
     }
 
     public static void main(String args[]) {

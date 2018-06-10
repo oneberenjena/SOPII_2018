@@ -63,7 +63,7 @@ public class Process extends Thread {
                         totalTime = 0;
                         endTime = true;
                     }
-                } else if (this.status == 2) {
+                } else if (this.status == 2 || this.status == 1) {
                     memoryTime++;
                 }
 
