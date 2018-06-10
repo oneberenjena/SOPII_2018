@@ -1,27 +1,24 @@
 /**
  * 
- * Page class for simulating page blocks in memory. 
+ * Page class for simulating page blocks in memory.
  *
- * @version     1.0 May 2018
- * @author      Amanda Camacho, 
- *               Benjamin Amos <benjamin.oxi@gmail.com>
+ * @version 1.0 May 2018
+ * @author Amanda Camacho <ajmandi94@gmail.com>, Benjamin Amos
+ *         <benjamin.oxi@gmail.com>
  */
 public class Page {
-    private String processId;   //Id del proceso 
-    private String processName; //Nombre del proceso 
-    private Integer pageId;     // Id de la pagina 
-
-    private int size;       
-    private int usedSpace;
     private Process processInPage;
+    private Integer pageId;
+    private int size;
+    private int usedSpace;
 
     /**
      * Constructor for memory page
      * 
-     * @param block      Block name in memory table
-     * @param size       Size in MB that memory page will have
+     * @param block Block name in memory table
+     * @param size  Size in MB that memory page will have
      */
-    public Page(int block, int size){
+    public Page(int block, int size) {
         this.pageId = block;
         this.size = size;
         this.usedSpace = 0;
@@ -33,16 +30,16 @@ public class Page {
      * 
      * @return Memory block id
      */
-    public int id(){
+    public int id() {
         return this.pageId;
-    } 
+    }
 
     /**
      * Retrieves total block size in MB
      * 
      * @return Memory block size in MB
      */
-    public int size(){
+    public int size() {
         return this.size;
     }
 
@@ -51,7 +48,7 @@ public class Page {
      * 
      * @return int Block used space in MB
      */
-    public int usedSpace(){
+    public int usedSpace() {
         return this.usedSpace;
     }
 
@@ -60,7 +57,7 @@ public class Page {
      * 
      * @return Nothing
      */
-    public void freeSpace(){
+    public void freeSpace() {
         this.usedSpace = 0;
         this.processInPage = null;
     }
@@ -70,15 +67,25 @@ public class Page {
      * 
      * @return true if there's a process in block, otherwise false
      */
-    public boolean hasProcess(){
+    public boolean hasProcess() {
         return (this.processInPage == null) ? false : true;
     }
 
-    public int whichProcess(){
+    /**
+     * Retrieves a PID from process in page
+     * 
+     * @return Process PID if there's a process running in this page, otherwise -1
+     */
+    public int whichProcess() {
         return this.processInPage != null ? this.processInPage.getPid() : -1;
     }
 
-    public Process processInPage(){
+    /**
+     * Retrieves process in page
+     * 
+     * @return Process  Process running in this page
+     */
+    public Process processInPage() {
         return this.processInPage;
     }
 
@@ -87,7 +94,7 @@ public class Page {
      * 
      * @return Nothing
      */
-    public void assignProcess(Process process, int pSize){
+    public void assignProcess(Process process, int pSize) {
         this.processInPage = process;
         this.usedSpace = pSize;
         process.addPage(this);
@@ -98,7 +105,7 @@ public class Page {
      * 
      * @return String with page info
      */
-    public String toString(){
+    public String toString() {
         String pageName = "Page starting at: " + Integer.toString(this.pageId) + ".\n";
         String pageInfo = "Page size: " + this.size + ".\n";
         String pageInfo1 = "Page usedSpace: " + this.usedSpace + ".\n";
@@ -108,7 +115,7 @@ public class Page {
         } else {
             pageInfo2 = "Process using space: Ninguno.\n";
         }
-        
+
         return pageName + pageInfo + pageInfo1 + pageInfo2;
     }
 }

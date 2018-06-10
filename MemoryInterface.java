@@ -12,25 +12,24 @@ import java.util.ArrayList;
 
 /**
  * 
- * Memory class for simulating OS memory management.
+ * MemoryInterface class for simulating OS memory management.
  * 
  * @version 1.0 May 2018
- * @author Amanda Camacho, <ajmandi94@gmail.com> Benjamin Amos
+ * @author Amanda Camacho <ajmandi94@gmail.com>, Benjamin Amos
  *         <benjamin.oxi@gmail.com>
  */
 
 public class MemoryInterface extends JPanel {
 
     private Memory memory;
-    // private Process process[];
     private MemoryInterface memoryInterface = this;
     private List<Process> process;
     private int countProcess = 0;
 
-    private JPanel allPanel;
-    private JPanel panelFila1;
-    private JPanel panelFila2;
-    private JPanel panelFila3;
+    // private JPanel allPanel;
+    // private JPanel panelFila1;
+    // private JPanel panelFila2;
+    // private JPanel panelFila3;
 
     private JPanel memoryConf;
     private JLabel memorySizeLabel;
@@ -612,7 +611,7 @@ public class MemoryInterface extends JPanel {
                 int pages = sizeMem / sizePag;
                 memory = new Memory(sizeMem, pages, sizePag, memoryInterface, alertArea);
                 memory.start();
-                this.process = new ArrayList<Process>(); 
+                this.process = new ArrayList<Process>();
                 alertArea.append("Se ha creado la memoria\n");
                 saveMemoryConf.setEnabled(false);
                 labelMemory2.setText(Integer.toString(sizeMem));
@@ -656,27 +655,21 @@ public class MemoryInterface extends JPanel {
     private void saveProcessConfAction(java.awt.event.ActionEvent evt) {
         String nameProc = processName.getText();
         int sizeProc = Integer.parseInt(processSize.getText());
-        System.out.println(nameProc);
         if (sizeProc <= memory.getfreeMemory()) {
-            // creo el proceso
-            // this.process.get(countProcess) = new Process(nameProc, sizeProc, memory.getPageSize());
-            Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize()); 
+            Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize());
+            System.out.format("New process %s with PID %d%n", nameProc, newProcess.getPid());
             this.process.add(newProcess);
-            // Lo agrego a memoria
-            
-            // memory.addProcess(this.process[countProcess]);
             memory.addProcess(this.process.get(countProcess));
-            // no tengo funcion para esto todavia
-            // ahora si
             alertArea.append(" Se ha creado el proceso " + nameProc + ", con PID "
-                    // + Integer.toString(this.process[countProcess].getPid()) + "\n");
                     + Integer.toString(this.process.get(countProcess).getPid()) + "\n");
             countProcess++;
             labelNumberProcess2.setText(Integer.toString(countProcess));
             updateProcessTable();
             update();
         } else {
-            alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso"+"\n");
+            alertArea.append("No hay suficiente espacio en la memoria para ejecutar el proceso" + "\n");
+            // Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize());
+            // memory.addProcess(newProcess);
         }
 
     }
@@ -735,7 +728,7 @@ public class MemoryInterface extends JPanel {
     // #########################################################################
     // #########################################################################
 
-    //Suspender es para utilizarlo en memoria virtual 
+    // Suspender es para utilizarlo en memoria virtual
 
     private void suspendProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
@@ -774,10 +767,10 @@ public class MemoryInterface extends JPanel {
         }
         updateProcessTable();
         update();
-        
+
     }
 
-    //Ready es el nuevo boton, para reanudar el proceso despues que fue bloqueado
+    // Ready es el nuevo boton, para reanudar el proceso despues que fue bloqueado
 
     private void readyProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
@@ -794,13 +787,10 @@ public class MemoryInterface extends JPanel {
         update();
     }
 
-
-
-
     private void lockProcessActionPerformed(java.awt.event.ActionEvent evt) {
         int row = processTable.getSelectedRow();
         int selectedPid = Integer.parseInt(processTable.getModel().getValueAt(row, 0).toString());
-        
+
         int status = 2;
 
         // se debe parar el tiempo de ejecucion
@@ -811,7 +801,7 @@ public class MemoryInterface extends JPanel {
         }
         updateProcessTable();
         update();
-    
+
     }
 
     // ########################################################################
@@ -824,39 +814,39 @@ public class MemoryInterface extends JPanel {
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
-        ArrayList<Page> auxPages= memory.getInMemory();
+        ArrayList<Page> auxPages = memory.getInMemory();
         // System.out.println(auxPages);
         // Vuelvo a cargar desde lo que me dice la memoria que tiene
 
-        for (int i=0;i<auxPages.size();i++) {
-            if ( auxPages.get(i).hasProcess()){
-                Object[] row = { "0x"+Integer.toHexString(auxPages.get(i).id()), auxPages.get(i).id(),
-                    auxPages.get(i).processInPage().getPid(), auxPages.get(i).processInPage().name(), 
-                    auxPages.get(i).processInPage().getNumberOfPages() };
-                    model.addRow(row);
-            }else{
-                  Object[] row = { "0x"+Integer.toHexString(i*memory.getPageSize()), auxPages.get(i).id(),
-                    " "," ", " " };
-                    model.addRow(row);
+        for (int i = 0; i < auxPages.size(); i++) {
+            if (auxPages.get(i).hasProcess()) {
+                Object[] row = { "0x" + Integer.toHexString(auxPages.get(i).id()), auxPages.get(i).id(),
+                        auxPages.get(i).processInPage().getPid(), auxPages.get(i).processInPage().name(),
+                        auxPages.get(i).processInPage().getNumberOfPages() };
+                model.addRow(row);
+            } else {
+                Object[] row = { "0x" + Integer.toHexString(i * memory.getPageSize()), auxPages.get(i).id(), " ", " ",
+                        " " };
+                model.addRow(row);
             }
-          
+
         }
-        
+
     }
 
     private synchronized void updateProcessTable() {
-        System.out.format("Process list size is %d%n", process.size());
+        // System.out.format("Process list size is %d%n", process.size());
         // Elimino todas las filas
         DefaultTableModel model = (DefaultTableModel) processTable.getModel();
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
-            //System.out.format("Print innecesario en la vuelta %d de las columnas%n", i);
+            // System.out.format("Print innecesario en la vuelta %d de las columnas%n", i);
             model.removeRow(i);
         }
 
         for (Process pro : process) {
             if (pro.getStatus() != 0) {
-                Object[] row = { pro.getPid(), pro.name(), pro.getSize(),
-                        pro.getNumberOfPages(), pro.printPages(), pro.status() };
+                Object[] row = { pro.getPid(), pro.name(), pro.getSize(), pro.getNumberOfPages(), pro.printPages(),
+                        pro.status() };
                 model.addRow(row);
             } else {
                 // System.out.println(process.toArray().toString());
@@ -880,12 +870,11 @@ public class MemoryInterface extends JPanel {
      * 
      */
 
-    public void reduceCountProcess(Process pro){
+    public void reduceCountProcess(Process pro) {
         this.process.remove(pro);
         this.countProcess--;
 
     }
-
 
     public static void main(String args[]) {
         JFrame frame = new JFrame("Simulador de memoria");

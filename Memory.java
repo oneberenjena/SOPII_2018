@@ -9,7 +9,8 @@ import javax.swing.JTextArea;
  * Memory class for simulating OS memory management.
  * 
  * @version 1.0 May 2018
- * @author Amanda Camacho, Benjamin Amos <benjamin.oxi@gmail.com>
+ * @author Amanda Camacho <ajmandi94@gmail.com>, Benjamin Amos
+ *         <benjamin.oxi@gmail.com>
  */
 public class Memory extends Thread {
     private ArrayList<Page> pageList;
@@ -26,23 +27,25 @@ public class Memory extends Thread {
     /**
      * Constructor for memory
      * 
-     * @param size       Size in MB that memory will have
-     * @param pageNumber Total memory pages
-     * @param blockSize  Size in MB that pages will have
+     * @param size              Size in MB that memory will have
+     * @param pageNumber        Total memory pages
+     * @param pageSize          Size in MB that pages will have
+     * @param memoryInterface   Memory interface instance for updating
+     * @param alertArea         Alert area instance at interface for logs
      */
 
-    public Memory(int size, int pageNumber, int blockSize, MemoryInterface memoryInterface,JTextArea alertArea) {
+    public Memory(int size, int pageNumber, int pageSize, MemoryInterface memoryInterface,JTextArea alertArea) {
         this.memorySize = size;
         this.usedSpace = 0;
         this.pageNumber = pageNumber;
-        this.pageSize = blockSize;
+        this.pageSize = pageSize;
         this.pageList = new ArrayList<Page>();
         this.dispPages = pageNumber;
         this.waitingProcess = new LinkedList<Process>();
         int iBlock;
         for (int i = 0; i < pageNumber; i++) {
             iBlock = i;
-            this.pageList.add(new Page(iBlock, blockSize));
+            this.pageList.add(new Page(iBlock, pageSize));
         }
         this.memoryInterface = memoryInterface;
         this.alertArea=alertArea;
@@ -76,25 +79,24 @@ public class Memory extends Thread {
         return this.usedSpace;
     }
 
-    /*
-    */
-
+    /**
+     * Synchronized method for adding a new process in memory
+     * 
+     * @param process Process to add in memory
+     */
     public synchronized void addProcess(Process process) {
         int pagesToUse = process.getNumberOfPages();
         int processSize = process.getSize();
-
+        System.out.format("Process will be using %d page(s) from %d pages available.%n", pagesToUse, this.dispPages);
         if (this.dispPages >= pagesToUse) {
-            // Si requiere una sola pagina
+            // If page size satisfies process requeriments
             if (pagesToUse == 1) {
                 Page freePage = this.getFreeBlock();
                 freePage.assignProcess(process, processSize);
                 this.auxUsedMemory(this.pageSize);
                 this.dispPages--;
-                // this.memoryInterface.addCountProcess();
                 process.start();
-                // Thread newThread = new Thread(this, process.name());
-                // newThread.run();
-                // Si requiere mas de una pagina
+            // If a single page is not enough
             } else if (pagesToUse > 1) {
                 List<Page> freePages = getFreeBlocks(processSize);
                 int processSizeLeft = processSize;
@@ -104,21 +106,25 @@ public class Memory extends Thread {
                     processSizeLeft -= freePage.size();
                     this.dispPages--;
                 }
-                // this.memoryInterface.addCountProcess();
                 process.start();
-                // new Thread(this, process.name());
-
             }
+        // If there's no space, queue the process
         } else {
-            // Coloco los procesos en una cola de espera
+            System.out.println("No space, queueing process");
             this.waitingProcess.add(process);
+            System.out.format("Process queue size %d.%n",this.waitingProcess.size());
         }
 
     }
 
+    /**
+     * Overrided process for Thread run(). Simulates physical memory
+     *  by removing done process and freeing space, and adding process
+     *  in queue. 
+     * 
+     */
     public void run() {
-        System.out.println("Iniciando hilo de memoria..");
-        System.out.println(this.memoryInterface);
+        System.out.println("Starting memory thread..");
         while (true) {
             for (Page page : this.pageList) {
                 if (page.hasProcess() && page.processInPage().getStatus() == 0) {
@@ -134,30 +140,46 @@ public class Memory extends Thread {
                     this.waitingProcess.add(this.waitingProcess.poll());
                 }
             }
-            
         }
     }
 
+    /**
+     * Synchronized method for removing a process from interface
+     * 
+     * @param process Process to remove from interface and get killed
+     */
     public synchronized void removeProcessFromInterface(Process process) {
         this.alertArea.append("El proceso "+ Integer.toString(process.getPid())+ " termino su ejecucion\n");
-        System.out.format("El proceso %d termino su ejecucion. Eliminando..", process.getPid());
+        System.out.format("Process with PID %d finished its execution. Removing from table..", process.getPid());
         this.memoryInterface.reduceCountProcess(process);
         this.killProcess(process.getPid());
-        System.out.println("Eliminado.");
+        System.out.println("Process removed.");
         this.memoryInterface.update();
     }
 
-    /*
-    */
+    /**
+     * Retrieves number of used pages
+     * 
+     * @return int Number of used pages
+     */
     public int getUsedPages() {
         return this.pageNumber - this.dispPages;
     }
 
-    // funcion auxiliar para hacer pruebas
+    /**
+     * Sets new used space in memory
+     * 
+     * @param newUsedSpace Size of memory in MB that will be used
+     */
     public void auxUsedMemory(int newUsedSpace) {
         this.usedSpace += newUsedSpace;
     }
 
+    /**
+     * Clear used space in memory 
+     * 
+     * @param used Size of memory in MB that will be freed
+     */
     public void freeSpace(int used) {
         this.usedSpace -= used;
     }
@@ -224,17 +246,25 @@ public class Memory extends Thread {
         return pageList;
     }
 
+    /**
+     * Retrieves all pages in memory
+     * 
+     * @return  ArrayList<Page> Total pages in memory
+     */
     public ArrayList<Page> getInMemory() {
         return this.pageList;
     }
 
+    /**
+     * Synchronized method for killing a process
+     * 
+     * @param pid   PID from process to be killed
+     */
     public synchronized boolean killProcess(int pid) {
         Process toKill;
         boolean wasInMemory = false;
-        System.out.format("Eliminando proceso con PID:%d%n", pid);
         for (Page page : this.pageList) {
             if (page.whichProcess() == pid) {
-                System.out.format("Eliminando de la pagina con ID:%d%n", page.id());
                 toKill = page.processInPage();
                 toKill.killProccess();
                 page.freeSpace();
