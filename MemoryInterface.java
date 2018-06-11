@@ -92,21 +92,21 @@ public class MemoryInterface extends JPanel {
         memoryConf.setBorder(new TitledBorder(titulo));
         memoryConf.setPreferredSize(new Dimension(350, 200));
 
-        memorySizeLabel.setText("Tamaño de memoria ");
+        memorySizeLabel.setText("Tamaño de memoria (MB) ");
         memorySizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         memorySizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        memoryPageSizeLabel.setText("Tamaño de paginas");
+        memoryPageSizeLabel.setText("Tamaño de paginas (MB)");
         memoryPageSizeLabel.setFont(new java.awt.Font("Tahoma", 1, 11));
         memoryPageSizeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        memorySize.setText("15360");
+        memorySize.setText("8192");
         memorySize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 memorySizeActionPerformed(evt);
             }
         });
-        memoryPageSize.setText("1024");
+        memoryPageSize.setText("8");
         memoryPageSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 memoryPageSizeActionPerformed(evt);
@@ -431,7 +431,7 @@ public class MemoryInterface extends JPanel {
 
         memoryStatusTitle = memoryStatusTitle.substring(memoryStatusTitle.lastIndexOf('.') + 1);
         panelMemoryStatus.setBorder(new TitledBorder(memoryStatusTitle));
-        panelMemoryStatus.setPreferredSize(new Dimension(600, 300));
+        panelMemoryStatus.setPreferredSize(new Dimension(600, 200));
 
         memoryTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
 
@@ -479,10 +479,10 @@ public class MemoryInterface extends JPanel {
 
         graphicsTitle = graphicsTitle.substring(graphicsTitle.lastIndexOf('.') + 1);
         graphicsPanel.setBorder(new TitledBorder(graphicsTitle));
-        graphicsPanel.setPreferredSize(new Dimension(400, 300));
+        graphicsPanel.setPreferredSize(new Dimension(400, 200));
 
         alertArea.setColumns(30);
-        alertArea.setRows(16);
+        alertArea.setRows(10);
         scrollAlertArea.setViewportView(alertArea);
 
         graphicsPanel.add(scrollAlertArea);
@@ -667,7 +667,7 @@ public class MemoryInterface extends JPanel {
             updateProcessTable();
             update();
         } else {
-            String alert = "No hay suficiente espacio en la memoria para ejecutar el proceso.";
+            String alert = "No hay suficiente espacio en la memoria para ejecutar\nel proceso.";
 			alertArea.append(alert + "\n");
             Process newProcess = new Process(nameProc, sizeProc, memory.getPageSize());
             memory.queueProcess(newProcess);
@@ -899,7 +899,7 @@ public class MemoryInterface extends JPanel {
         });
         MemoryInterface memoryInterface = new MemoryInterface();
         frame.getContentPane().add(memoryInterface, BorderLayout.WEST);
-        frame.setSize(1100, 800);
+        frame.setSize(1100, 700);
         frame.setVisible(true);
     }
 }
